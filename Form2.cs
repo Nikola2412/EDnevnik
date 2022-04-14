@@ -68,6 +68,14 @@ namespace Dnevnik_2._0
             }
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.Visible)
+                dataGridView1.Hide();
+            else
+                dataGridView1.Show();
+        }
+
         public void UCITAJ()
         {
 
@@ -85,6 +93,7 @@ namespace Dnevnik_2._0
             {
 
                 List<int> o = new List<int>();
+                
 
                 int index = sqlite_datareader.GetInt16(0);
                 string uc = sqlite_datareader.GetString(1);
@@ -95,6 +104,7 @@ namespace Dnevnik_2._0
 
                 sqlite_datareader2 = sqlite_cmd2.ExecuteReader();
                 int srednja = 0;
+                dataGridView1.Rows.Add(uc);
                 while (sqlite_datareader2.Read())
                 {
                     int ocena = sqlite_datareader2.GetInt16(2);
@@ -110,8 +120,10 @@ namespace Dnevnik_2._0
                         dvojke++;
                     else
                         jedinice++;
+                    int dt = int.Parse(sqlite_datareader2.GetString(3).Split('-')[1]);
+                    dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString()+" ";
                 }
-
+                
                 Raspodela(uc, sqlite_datareader.GetBoolean(5));
                 conn2.Close();
                 u.Add(new ucenik(uc, o, srednja, sqlite_datareader.GetInt16(0), sqlite_datareader.GetBoolean(5)));
@@ -127,6 +139,19 @@ namespace Dnevnik_2._0
             conn.Close();
             pita();
         }
+
+        private void Form2_Resize(object sender, EventArgs e)
+        {
+            ponovna_raspodela_lab();
+            ponovna_raspodela_pic();
+        }
+
+        public void data(int ocena,int i, string mesec)
+        {
+            
+        }
+            
+
         public void Update_pita()
         {
             chart1.Series.Clear();

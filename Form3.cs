@@ -33,6 +33,7 @@ namespace Dnevnik_2._0
 
         private void Form3_Load(object sender, EventArgs e)
         {
+            //MessageBox.Show(DateTime.Now.ToString("yyyy-M-d"));
             f2 = (Form2)Application.OpenForms[1];
             x_y();
             a = f2.a;
@@ -57,7 +58,7 @@ namespace Dnevnik_2._0
                 conn.Open();
                 //MessageBox.Show("Konskcija je: " + conn.State.ToString());
                 int i = f2.u[index].id;
-                cmd = new SQLiteCommand(String.Format("insert into Ocena(ID_ucenika,Ocena) values('{0}',{1});", i, ocena), conn);
+                cmd = new SQLiteCommand(String.Format("insert into Ocena(ID_ucenika,Ocena,Datum_unosa) values('{0}',{1},'{2}');", i, ocena, DateTime.Now.ToString("yyyy-M-d")), conn);
                 cmd.ExecuteNonQuery();
 
 
