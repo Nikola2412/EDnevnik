@@ -40,7 +40,10 @@ namespace Dnevnik_2._0
         }
 
         double nw;
-
+        public void velicina_forme()
+        {
+            this.Size = new Size(1280, 720);
+        }
         private void Form2_Load(object sender, EventArgs e)
         {
             f1 = (Form1)Application.OpenForms[0];
@@ -50,8 +53,7 @@ namespace Dnevnik_2._0
 
 
 
-            this.Size = new Size(1280, 720);
-            s = this.Size;
+            velicina_forme();
 
             Kalkulacije_broja_ucenika();
 
@@ -71,9 +73,15 @@ namespace Dnevnik_2._0
         private void button2_Click(object sender, EventArgs e)
         {
             if (dataGridView1.Visible)
+            {
                 dataGridView1.Hide();
+                velicina_forme();
+            }
             else
+            {
                 dataGridView1.Show();
+                this.Width = dataGridView1.Width;
+            }
         }
 
         public void UCITAJ()
@@ -142,12 +150,10 @@ namespace Dnevnik_2._0
 
         private void Form2_Resize(object sender, EventArgs e)
         {
+            Kalkulacije_broja_ucenika();
+
             ponovna_raspodela_lab();
             ponovna_raspodela_pic();
-        }
-
-        public void data(int ocena,int i, string mesec)
-        {
             
         }
             
@@ -238,7 +244,7 @@ namespace Dnevnik_2._0
             if (i % nw == 0)
             {
                 y += b + rh;
-                x = border;
+                x = 100;
             }
         }
         public void kordinate()
@@ -257,9 +263,10 @@ namespace Dnevnik_2._0
             }
             rw = 15; rh = 40;
             a = 100; b = 120;
-            double d = (s.Width - border * 2 - a - k) / (a + rw);
+            double d = (this.Width - border * 2 - a - k) / (a + rw);
             nw = Math.Floor(d);
-
+            if (nw < 1)
+                nw = 1;
             kordinate();
 
         }
