@@ -32,6 +32,7 @@ namespace Dnevnik_2._0
         int rw = 5;
         public int petice = 0, cetvorke = 0, trojke = 0, dvojke = 0, jedinice = 0;
         string legenda = "Ocene";
+        List<string> opis = new List<string>();
 
         private void Form5_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -70,7 +71,8 @@ namespace Dnevnik_2._0
         }
         private void klik(object sender, EventArgs e)
         {
-            MessageBox.Show(((Button)sender).Location.ToString());
+            int index_ocene = int.Parse(((Button)sender).Name);
+            MessageBox.Show(opis[index_ocene-1]);
         }
         public void kalkulacija()
         {
@@ -98,6 +100,7 @@ namespace Dnevnik_2._0
                     Location = new Point(x, y),
                     Text = ocena.ToString()
                 }) ;
+                opis.Add(sqlite_datareader.GetString(4));
 
                 if (ocena == 5)
                     petice++;

@@ -33,13 +33,14 @@ namespace Dnevnik_2._0
             sqlite_cmd.CommandText = "SELECT * FROM Nastavnik";
 
             sqlite_datareader = sqlite_cmd.ExecuteReader();
-
+            //login nastavnika, proverava se tabela "Nastavnik"
             while (sqlite_datareader.Read())
             {
                 if (u == sqlite_datareader.GetString(3))
                 {
                     if (p == sqlite_datareader.GetString(4))
                     {
+                        //ako se podaci poklapaju druga forma se ucitava
                         f2 = new Form2();
                         f2.id_nastavnika = sqlite_datareader.GetInt16(0);
                         f2.username = u;f2.password = p;
@@ -61,13 +62,14 @@ namespace Dnevnik_2._0
             sqlite_cmd.CommandText = "SELECT * FROM Ucenik";
 
             sqlite_datareader = sqlite_cmd.ExecuteReader();
-
+            //login ucenika, proverava se tabela "Ucenika"
             while (sqlite_datareader.Read())
             {
                 if (u == sqlite_datareader.GetString(3))
                 {
                     if (p == sqlite_datareader.GetString(4))
                     {
+                        //ako se podaci poklapaju druga forma se ucitava
                         Form5 f5 = new Form5();
                         f5.index = sqlite_datareader.GetInt32(0);
                         f5.ime = sqlite_datareader.GetString(1);
@@ -84,6 +86,7 @@ namespace Dnevnik_2._0
 
         private void button3_Click(object sender, EventArgs e)
         {
+            //proverava se koj buttons se klikne
             if (profesor)
             {
                 login_nastavnika(textBox1.Text,textBox2.Text);
@@ -95,6 +98,7 @@ namespace Dnevnik_2._0
         }
         public void pocetni()
         {
+            //Pocetni ekran
             button1.Show();
             button2.Show();
             button4.Hide();
@@ -116,12 +120,13 @@ namespace Dnevnik_2._0
             if (!System.IO.Directory.Exists(put))
                 Directory.CreateDirectory(put);
             baze = "Baze.db";
+            //sqlite konekcije
             conn = new SQLiteConnection(String.Format($"Data Source={baze};Version=3;"));
             conn2 = new SQLiteConnection(String.Format($"Data Source={baze};Version=3;"));
             conn3 = new SQLiteConnection(String.Format($"Data Source={baze};Version=3;"));
 
             SQLiteCommand cmd;
-
+            //Provera da li baza postoji
             if (!File.Exists(baze))
             {
                 SQLiteConnection.CreateFile(baze);
@@ -171,6 +176,7 @@ namespace Dnevnik_2._0
 
         public void Log_in_scr()
         {
+            //Login screen
             button4.Show();
             groupBox1.Visible = true;
             this.Size = new Size(300,300);
@@ -178,7 +184,7 @@ namespace Dnevnik_2._0
             button2.Visible = false;
 
         }
-
+        //proverava se koj je buttnon kliknuo korisnik
         private void button1_Click(object sender, EventArgs e)
         {
             profesor = true;

@@ -21,14 +21,24 @@ namespace Dnevnik_2._0
         {
             f3 = (Form3)Application.OpenForms[2];
         }
-
+        int ocena;
         private void button1_Click(object sender, EventArgs e)
         {
-            int ocena = int.Parse(((Button)sender).Text);
+            ocena = int.Parse(((Button)sender).Text);
+        }
 
-            f3.UPISI_U_BAAZU(ocena);
-            f3.Show();
-            this.Close();
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text != "")
+            {
+                f3.UPISI_U_BAAZU(ocena, textBox1.Text);
+                f3.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Nesto niste izabrali");
+            }
         }
     }
 }

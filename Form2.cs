@@ -100,7 +100,7 @@ namespace Dnevnik_2._0
             while (sqlite_datareader.Read())
             {
 
-                List<int> o = new List<int>();
+                List<Tuple<int,string>> o = new List<Tuple<int,string>>();
                 
 
                 int index = sqlite_datareader.GetInt16(0);
@@ -116,7 +116,8 @@ namespace Dnevnik_2._0
                 while (sqlite_datareader2.Read())
                 {
                     int ocena = sqlite_datareader2.GetInt16(2);
-                    o.Add(ocena);
+                    string opis = sqlite_datareader2.GetString(4);
+                    o.Add(Tuple.Create(ocena,opis));
                     srednja += ocena;
                     if (ocena == 5)
                         petice++;

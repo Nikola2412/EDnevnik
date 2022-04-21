@@ -48,7 +48,7 @@ namespace Dnevnik_2._0
             f4.Show();
             this.Hide();
         }
-        public void UPISI_U_BAAZU(int ocena)
+        public void UPISI_U_BAAZU(int ocena,string opis)
         {
             SQLiteCommand cmd;
             conn = f2.conn2;
@@ -58,7 +58,7 @@ namespace Dnevnik_2._0
                 conn.Open();
                 //MessageBox.Show("Konskcija je: " + conn.State.ToString());
                 int i = f2.u[index].id;
-                cmd = new SQLiteCommand(String.Format("insert into Ocena(ID_ucenika,Ocena,Datum_unosa) values('{0}',{1},'{2}');", i, ocena, DateTime.Now.ToString("yyyy-M-d")), conn);
+                cmd = new SQLiteCommand(String.Format("insert into Ocena(ID_ucenika,Ocena,Datum_unosa,Opis) values('{0}',{1},'{2}','{3}');", i, ocena, DateTime.Now.ToString("yyyy-M-d"),opis), conn);
                 cmd.ExecuteNonQuery();
 
 
@@ -71,7 +71,7 @@ namespace Dnevnik_2._0
             finally
             {
                 conn.Close();
-                f2.u[index].ocene.Add(ocena);
+                f2.u[index].Ocena_opis.Add(Tuple.Create(ocena,opis));
                 CITAJ();
                 if (ocena == 5)
                     f2.petice++;
@@ -89,12 +89,14 @@ namespace Dnevnik_2._0
 
         private void button2_Click(object sender, EventArgs e)
         {
+            o.Clear();
             index++;
             CITAJ();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            o.Clear();
             index--;
             CITAJ();
         }
@@ -113,7 +115,10 @@ namespace Dnevnik_2._0
                 button2.Enabled = true;
             
             pictureBox1.Image = f2.p[index].Image;
-            o = f2.u[index].ocene;
+            foreach (Tuple<int,string> ocena in f2.u[index].Ocena_opis)
+            {
+                o.Add(ocena.Item1);
+            }
             ime = f2.u[index].UCENIK;
             label1.Text = ime;
 
@@ -183,7 +188,8 @@ namespace Dnevnik_2._0
 
         private void klik(object sender, EventArgs e)
         {
-            MessageBox.Show(((Button)sender).Location.ToString());
+            int i = int.Parse(((Button)sender).Name);
+            MessageBox.Show(f2.u[index].Ocena_opis[i].Item2);
         }
     }
 }
