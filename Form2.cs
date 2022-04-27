@@ -10,6 +10,7 @@ namespace Dnevnik_2._0
     {
         public SQLiteConnection conn, conn2;
         Form1 f1;
+        Form6 f6;
         public Form2()
         {
             InitializeComponent();
@@ -49,6 +50,9 @@ namespace Dnevnik_2._0
             //omogucava pristup formi 1
             f1 = (Form1)Application.OpenForms[0];
 
+            f6 = new Form6();
+
+
             conn = f1.conn2;
             conn2 = f1.conn3;
 
@@ -78,16 +82,19 @@ namespace Dnevnik_2._0
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //pokazije ili sakriva datagridView
-            if (dataGridView1.Visible)
+            //pokazije ili sakriva formu
+            if (f6.Visible)
             {
-                dataGridView1.Hide();
-                velicina_forme();
+                //dataGridView1.Hide();
+                //velicina_forme();
+                f6.Hide();
             }
             else
             {
-                dataGridView1.Show();
-                this.Width = dataGridView1.Width;
+                //dataGridView1.Show();
+                //this.Width = dataGridView1.Width;
+                f6.Show();
+                f6.sirina();
             }
         }
 
@@ -126,7 +133,8 @@ namespace Dnevnik_2._0
                 int srednja = 0;
 
                 //dodaje ucenike u datagridview
-                dataGridView1.Rows.Add(uc);
+                //dataGridView1.Rows.Add(uc);
+                f6.dataGridView1.Rows.Add(uc);
                 //cita ocene i broj da li su 5, 4, 3, 2 ili 1 da bi se uradila pita 
                 while (sqlite_datareader2.Read())
                 {
@@ -144,8 +152,10 @@ namespace Dnevnik_2._0
                         dvojke++;
                     else
                         jedinice++;
+                    //izdvaja mesec iz datuma
                     int dt = int.Parse(sqlite_datareader2.GetString(3).Split('-')[1]);
-                    dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString()+" ";
+                    //dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString()+" ";
+                    f6.dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString()+" ";
                 }
                 //raspodela ucenika po ekranu
                 Raspodela(uc, sqlite_datareader.GetBoolean(5));
@@ -153,7 +163,7 @@ namespace Dnevnik_2._0
 
                 //dodaje ucenika u klasu
                 u.Add(new ucenik(uc, o, srednja, sqlite_datareader.GetInt16(0), sqlite_datareader.GetBoolean(5)));
-                
+                f6.dataGridView1.Rows[n].Cells["prosek"].Value = u[n].srednja;
                 //pomera u desno
                 x += a + rw;
                 n++;

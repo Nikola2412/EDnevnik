@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.button1 = new System.Windows.Forms.Button();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -64,17 +64,17 @@
             // 
             // chart1
             // 
-            chartArea3.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.chart1.Legends.Add(legend3);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(111, 12);
             this.chart1.Name = "chart1";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series3.Legend = "Legend1";
-            series3.Name = "s1";
-            this.chart1.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series1.Legend = "Legend1";
+            series1.Name = "s1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(585, 384);
             this.chart1.TabIndex = 1;
             this.chart1.Text = "chart1";
@@ -183,7 +183,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1268, 451);
+            this.ClientSize = new System.Drawing.Size(1339, 451);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.chart1);
@@ -203,20 +203,20 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        public System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Januar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Februar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Mart;
-        private System.Windows.Forms.DataGridViewTextBoxColumn April;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Maj;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Jun;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Jul;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Avgust;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Septembar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Oktobar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Novembar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Decembar;
+        public System.Windows.Forms.DataGridViewTextBoxColumn ime;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Januar;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Februar;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Mart;
+        public System.Windows.Forms.DataGridViewTextBoxColumn April;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Maj;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Jun;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Jul;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Avgust;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Septembar;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Oktobar;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Novembar;
+        public System.Windows.Forms.DataGridViewTextBoxColumn Decembar;
     }
 }
