@@ -46,6 +46,7 @@ namespace Dnevnik_2._0
         }
         private void Form5_Load(object sender, EventArgs e)
         {
+            //default podesavanja
             postavke();
             f1 = (Form1)Application.OpenForms[0];
             x = border;
@@ -54,15 +55,22 @@ namespace Dnevnik_2._0
             conn = f1.conn2;
 
             chart1.Series.Add(legenda);
+            //koliko ocena u jednom redu
             kalkulacija();
+            //ucitavanje iz baze
             Ispis();
+            //grafs ide ispos ispisa da se sve ocene prov prebroje
             chart();
+            //Prosek ucenika
             Prosek();
+
+            //odredjivanje pola za sliku
             if (pol)
                 odredi_pol = "musko.jpg";
             else
                 odredi_pol = "zensko.jpg";
             pictureBox1.Image = new Bitmap(Image.FromFile(odredi_pol),new Size(a,b));
+            //postavljanje dugmica i dodavanje eventa
             foreach (var item in bu)
             {
                 this.Controls.Add(item);
@@ -72,7 +80,8 @@ namespace Dnevnik_2._0
         private void klik(object sender, EventArgs e)
         {
             int index_ocene = int.Parse(((Button)sender).Name);
-            MessageBox.Show(opis[index_ocene-1]);
+            //opis ocene 
+            MessageBox.Show(opis[index_ocene]);
         }
         public void kalkulacija()
         {
@@ -91,7 +100,7 @@ namespace Dnevnik_2._0
             sqlite_datareader = sqlite_cmd.ExecuteReader();
             while (sqlite_datareader.Read())
             {
-                n++;
+                
                 int ocena = sqlite_datareader.GetInt16(2);
                 bu.Add(new Button
                 {
@@ -101,7 +110,8 @@ namespace Dnevnik_2._0
                     Text = ocena.ToString()
                 }) ;
                 opis.Add(sqlite_datareader.GetString(4));
-
+                n++;
+                //broji se za graf
                 if (ocena == 5)
                     petice++;
                 else if (ocena == 4)
@@ -137,6 +147,7 @@ namespace Dnevnik_2._0
         }
         public void Prosek()
         {
+            //prosek
             double d = (5*petice+ 4*cetvorke+3*trojke+2*dvojke+jedinice)/ n;
 
             label2.Text += d.ToString("0.00");

@@ -10,6 +10,7 @@ namespace Dnevnik_2._0
     {
         public string UCENIK;
         public double srednja;
+        //tuple ocena i opis nje
         public List<Tuple<int,string>> Ocena_opis = new List<Tuple<int, string>>();
         public int id;
         public bool pol;
@@ -18,7 +19,7 @@ namespace Dnevnik_2._0
             this.id = id;
             this.UCENIK = UCENIK;
             this.Ocena_opis = ocene;
-
+            //srednja ocena
             this.srednja = Math.Round(Srednja / this.Ocena_opis.Count(), 2);
             this.pol = pol;
 

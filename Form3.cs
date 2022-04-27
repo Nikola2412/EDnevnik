@@ -70,8 +70,12 @@ namespace Dnevnik_2._0
             }
             finally
             {
+                //kad sve zavrsi
+                //zatvara konekciju
                 conn.Close();
+                //dodaje u klacu tog ucenika
                 f2.u[index].Ocena_opis.Add(Tuple.Create(ocena,opis));
+                //ponovo ucitava
                 CITAJ();
                 if (ocena == 5)
                     f2.petice++;
@@ -103,8 +107,12 @@ namespace Dnevnik_2._0
 
         public void CITAJ()
         {
+
+            //restartuje
             brisi();
 
+
+            //prvobitni ili sledeci uvenik
             if (index == f2.u.Count() - 1)
                 button2.Enabled = false;
             if (index == 0)
@@ -115,6 +123,7 @@ namespace Dnevnik_2._0
                 button2.Enabled = true;
             
             pictureBox1.Image = f2.p[index].Image;
+            //dajaje u listu ocena
             foreach (Tuple<int,string> ocena in f2.u[index].Ocena_opis)
             {
                 o.Add(ocena.Item1);
@@ -122,8 +131,10 @@ namespace Dnevnik_2._0
             ime = f2.u[index].UCENIK;
             label1.Text = ime;
 
+            
             kalkulacija();
         }
+        //koliko ocena dda postavi u jednom redu
         public void kalkulacija()
         {
             double m = (2*ClientRectangle.Width/3 - strana) / (strana + rw);
@@ -135,6 +146,7 @@ namespace Dnevnik_2._0
             //MessageBox.Show(m.ToString());
 
             int n = 1;
+            //unosenje i postavnjanje
             foreach (var item in o)
             {
                 buttons.Add(new Button
@@ -159,11 +171,13 @@ namespace Dnevnik_2._0
                 this.Controls.Add(item);
             }
         }
+        //Default x y
         public void x_y()
         {
             x = ClientRectangle.Width / 3;
             y = border + strana/2;
         }
+        //Restart koda
         public void brisi()
         {
             x_y();
@@ -171,6 +185,7 @@ namespace Dnevnik_2._0
             {
                 this.Controls.Remove(item);
             }
+            o.Clear();
             buttons.Clear();
         }
 
@@ -188,8 +203,9 @@ namespace Dnevnik_2._0
 
         private void klik(object sender, EventArgs e)
         {
+            //izvlaci opis
             int i = int.Parse(((Button)sender).Name);
-            MessageBox.Show(f2.u[index].Ocena_opis[i].Item2);
+            MessageBox.Show(f2.u[index].Ocena_opis[i-1].Item2);
         }
     }
 }

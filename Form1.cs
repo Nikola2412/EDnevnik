@@ -185,6 +185,7 @@ namespace Dnevnik_2._0
 
         }
         //proverava se koj je buttnon kliknuo korisnik
+        //vazi sa dva voida ispod ovog komentara
         private void button1_Click(object sender, EventArgs e)
         {
             profesor = true;

@@ -38,7 +38,7 @@ namespace Dnevnik_2._0
             else
                 chart1.Show();
         }
-
+        //nw je koloko ucenika moze da stane u jedan res
         double nw;
         public void velicina_forme()
         {
@@ -46,24 +46,30 @@ namespace Dnevnik_2._0
         }
         private void Form2_Load(object sender, EventArgs e)
         {
+            //omogucava pristup formi 1
             f1 = (Form1)Application.OpenForms[0];
 
             conn = f1.conn2;
             conn2 = f1.conn3;
 
 
-
+            //postavlja formu na odredjenu velicinu
             velicina_forme();
 
+            //kalkulacija koliko moze ucenika da stane u jednom redu
             Kalkulacije_broja_ucenika();
 
+            //cita iz baze
             UCITAJ();
 
+
+            //postavlja picture bog sa slikom i eventom da kad kliknes na taj picture box
             foreach (var pic in p)
             {
                 pic.Click += new EventHandler(pictureBox1_Click);
                 this.Controls.Add(pic);
             }
+            //postavlja label sa imenom ucenika
             foreach (var label in l)
             {
                 this.Controls.Add(label);
@@ -72,6 +78,7 @@ namespace Dnevnik_2._0
 
         private void button2_Click(object sender, EventArgs e)
         {
+            //pokazije ili sakriva datagridView
             if (dataGridView1.Visible)
             {
                 dataGridView1.Hide();
@@ -88,31 +95,39 @@ namespace Dnevnik_2._0
         {
 
             conn.Open();
+            //konekcija za tabelu ucenici
             SQLiteDataReader sqlite_datareader;
             SQLiteCommand sqlite_cmd;
             SQLiteDataReader sqlite_datareader2;
             SQLiteCommand sqlite_cmd2;
 
+
+            //komanda za citanje
             sqlite_cmd = conn.CreateCommand();
             sqlite_cmd.CommandText = $"SELECT * FROM Ucenik where ID_nastavnika = {id_nastavnika}";
 
             sqlite_datareader = sqlite_cmd.ExecuteReader();
             while (sqlite_datareader.Read())
             {
-
+                //tuple ocena,opis ocene
                 List<Tuple<int,string>> o = new List<Tuple<int,string>>();
                 
 
                 int index = sqlite_datareader.GetInt16(0);
                 string uc = sqlite_datareader.GetString(1);
                 conn2.Open();
+                //konekcija za tabelu ocene
 
+                //komanda za citanje
                 sqlite_cmd2 = conn2.CreateCommand();
                 sqlite_cmd2.CommandText = $"SELECT * FROM Ocena Where ID_ucenika = {index}";
 
                 sqlite_datareader2 = sqlite_cmd2.ExecuteReader();
                 int srednja = 0;
+
+                //dodaje ucenike u datagridview
                 dataGridView1.Rows.Add(uc);
+                //cita ocene i broj da li su 5, 4, 3, 2 ili 1 da bi se uradila pita 
                 while (sqlite_datareader2.Read())
                 {
                     int ocena = sqlite_datareader2.GetInt16(2);
@@ -132,12 +147,18 @@ namespace Dnevnik_2._0
                     int dt = int.Parse(sqlite_datareader2.GetString(3).Split('-')[1]);
                     dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString()+" ";
                 }
-                
+                //raspodela ucenika po ekranu
                 Raspodela(uc, sqlite_datareader.GetBoolean(5));
                 conn2.Close();
+
+                //dodaje ucenika u klasu
                 u.Add(new ucenik(uc, o, srednja, sqlite_datareader.GetInt16(0), sqlite_datareader.GetBoolean(5)));
+                
+                //pomera u desno
                 x += a + rw;
                 n++;
+
+                //kad ce da prelomi u novi red
                 if (n % nw == 0)
                 {
                     y += b + rh;
@@ -151,6 +172,8 @@ namespace Dnevnik_2._0
 
         private void Form2_Resize(object sender, EventArgs e)
         {
+            //kad se forma 2 resajzuje oda sve kalkulacije da izracuna i da raspodeli ucenike
+            //Responziv
             Kalkulacije_broja_ucenika();
 
             ponovna_raspodela_lab();
@@ -161,6 +184,8 @@ namespace Dnevnik_2._0
 
         public void Update_pita()
         {
+            //Update pite
+
             chart1.Series.Clear();
             chart1.Series.Add("s1");
             chart1.Series["s1"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
@@ -169,6 +194,8 @@ namespace Dnevnik_2._0
         }
         public void pita()
         {
+            //dodavanje vrsta u piti
+
             if (petice != 0)
                 chart1.Series["s1"].Points.AddXY("5", petice);
             if (cetvorke != 0)
@@ -188,12 +215,17 @@ namespace Dnevnik_2._0
 
         public void Raspodela(string uc, bool pol)
         {
+            //rasporedjuje ucenike
+
             string odredi_pol;
+            //pos
             if (pol)
                 odredi_pol = "musko.jpg";
             else
                 odredi_pol = "zensko.jpg";
 
+
+            //dadavanje pictueboxa i labla
             p.Add(new PictureBox
             {
                 Name = n.ToString(),
@@ -213,6 +245,8 @@ namespace Dnevnik_2._0
 
 
         }
+
+        //ponovna raspodela pictureBoxa i labla
         public void ponovna_raspodela_pic()
         {
             kordinate();
@@ -238,7 +272,7 @@ namespace Dnevnik_2._0
 
             }
         }
-
+        //kontlolise x i y u jednoj metodi
         public void Povecaj_x_y(int i)
         {
             x += a + rw;
@@ -248,6 +282,7 @@ namespace Dnevnik_2._0
                 x = 100;
             }
         }
+        //Default kordnate
         public void kordinate()
         {
             x = 100;

@@ -24,11 +24,14 @@ namespace Dnevnik_2._0
         int ocena;
         private void button1_Click(object sender, EventArgs e)
         {
+
+            //detektuje koje dugme je pritinusto
             ocena = int.Parse(((Button)sender).Text);
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
+            //salje ocenu i opis ocene
             if (textBox1.Text != "")
             {
                 f3.UPISI_U_BAAZU(ocena, textBox1.Text);
