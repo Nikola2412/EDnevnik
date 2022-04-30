@@ -93,7 +93,7 @@ namespace Dnevnik_2._0
             {
                 //dataGridView1.Show();
                 //this.Width = dataGridView1.Width;
-                f6.Show();
+                f6.ShowDialog();
                 f6.sirina();
             }
         }
