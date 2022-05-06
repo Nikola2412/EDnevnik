@@ -10,7 +10,6 @@ namespace Dnevnik_2._0
     {
         public SQLiteConnection conn, conn2;
         Form1 f1;
-        Form6 f6;
         public Form2()
         {
             InitializeComponent();
@@ -23,6 +22,9 @@ namespace Dnevnik_2._0
         public List<ucenik> u = new List<ucenik>();
         public List<PictureBox> p = new List<PictureBox>();
         public List<Label> l = new List<Label>();
+
+
+        public int h_d;
 
         public int petice = 0, cetvorke = 0, trojke = 0, dvojke = 0, jedinice = 0;
 
@@ -50,8 +52,7 @@ namespace Dnevnik_2._0
             //omogucava pristup formi 1
             f1 = (Form1)Application.OpenForms[0];
 
-            f6 = new Form6();
-
+            
 
             conn = f1.conn2;
             conn2 = f1.conn3;
@@ -83,23 +84,46 @@ namespace Dnevnik_2._0
         private void button2_Click(object sender, EventArgs e)
         {
             //pokazije ili sakriva formu
-            if (f6.Visible)
+            if (dataGridView1.Visible)
             {
-                //dataGridView1.Hide();
-                //velicina_forme();
-                f6.Hide();
+                dataGridView1.Hide();
+                velicina_forme();
+                foreach (var item in p)
+                {
+                    this.Controls.Add(item);
+                }
+                foreach (var item in l)
+                {
+                    this.Controls.Add(item);
+                }
             }
             else
             {
-                //dataGridView1.Show();
-                //this.Width = dataGridView1.Width;
-                f6.ShowDialog();
-                f6.sirina();
+                dataGridView1.Show();
+                this.Width = dataGridView1.Width+dataGridView1.Location.X;
+
+                int dgv = dataGridView1.Height + dataGridView1.Location.Y+39;
+                int bh = button2.Height + button2.Location.Y+39;
+                if (dgv > bh)
+                    this.Height = dgv;
+                else
+                    this.Height = bh;
+                foreach (var item in p)
+                {
+                    this.Controls.Remove(item);
+                }
+                foreach (var item in l)
+                {
+                    this.Controls.Remove(item);
+                }
             }
         }
 
         public void UCITAJ()
         {
+
+            dataGridView1.Height = 0;
+            h_d = dataGridView1.RowHeadersWidth;
 
             conn.Open();
             //konekcija za tabelu ucenici
@@ -112,7 +136,7 @@ namespace Dnevnik_2._0
             //komanda za citanje
             sqlite_cmd = conn.CreateCommand();
             sqlite_cmd.CommandText = $"SELECT * FROM Ucenik where ID_nastavnika = {id_nastavnika}";
-
+            
             sqlite_datareader = sqlite_cmd.ExecuteReader();
             while (sqlite_datareader.Read())
             {
@@ -134,7 +158,9 @@ namespace Dnevnik_2._0
 
                 //dodaje ucenike u datagridview
                 //dataGridView1.Rows.Add(uc);
-                f6.dataGridView1.Rows.Add(uc);
+                dataGridView1.Rows.Add(uc);
+                dataGridView1.Height +=h_d;
+                
                 //cita ocene i broj da li su 5, 4, 3, 2 ili 1 da bi se uradila pita 
                 while (sqlite_datareader2.Read())
                 {
@@ -155,7 +181,7 @@ namespace Dnevnik_2._0
                     //izdvaja mesec iz datuma
                     int dt = int.Parse(sqlite_datareader2.GetString(3).Split('-')[1]);
                     //dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString()+" ";
-                    f6.dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString()+" ";
+                    dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString()+" ";
                 }
                 //raspodela ucenika po ekranu
                 Raspodela(uc, sqlite_datareader.GetBoolean(5));
@@ -163,7 +189,7 @@ namespace Dnevnik_2._0
 
                 //dodaje ucenika u klasu
                 u.Add(new ucenik(uc, o, srednja, sqlite_datareader.GetInt16(0), sqlite_datareader.GetBoolean(5)));
-                f6.dataGridView1.Rows[n].Cells["prosek"].Value = u[n].srednja;
+                dataGridView1.Rows[n].Cells["prosek"].Value = u[n].srednja;
                 //pomera u desno
                 x += a + rw;
                 n++;
@@ -178,6 +204,7 @@ namespace Dnevnik_2._0
             }
             conn.Close();
             pita();
+            MessageBox.Show(dataGridView1.RowCount.ToString());
         }
 
         private void Form2_Resize(object sender, EventArgs e)
