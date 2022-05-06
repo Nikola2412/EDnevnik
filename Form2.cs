@@ -48,47 +48,7 @@ namespace Dnevnik_2._0
             }
             else
             {
-                string putanja = "Ocene.xlsx";
-                //worksheet.Cells.AutoFit();
-                if (!File.Exists(putanja))
-                {
-
-                    Microsoft.Office.Interop.Excel._Application app = new Microsoft.Office.Interop.Excel.Application();
-                    Microsoft.Office.Interop.Excel._Workbook workbook = app.Workbooks.Add(Type.Missing);
-                    Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
-                    app.Visible = true;
-
-                    
-                    worksheet = workbook.Sheets["Sheet1"];
-                    worksheet = workbook.ActiveSheet;
-                    worksheet.Columns.AutoFit();
-                    //worksheet.Range["E2"].AutoFit();
-
-                    for (int i = 1; i < dataGridView1.Columns.Count + 1; i++)
-                    {
-                        worksheet.Cells[1, i] = dataGridView1.Columns[i - 1].HeaderText;
-                    }
-                    for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
-                    {
-                        for (int j = 0; j < dataGridView1.Columns.Count; j++)
-                        {
-                            if (dataGridView1.Rows[i].Cells[j].Value != null)
-                            {
-                                worksheet.Cells[i + 2, j + 1] = dataGridView1.Rows[i].Cells[j].Value.ToString();
-                                worksheet.Columns[j + 1].AutoFit();
-                            }
-                            else
-                            {
-                                worksheet.Cells[i + 2, j + 1] = "";
-                            }
-                        }
-                    }
-                    workbook.SaveAs(putanja);
-                }
-                else
-                {
-                    Process.Start(putanja);
-                }
+                EXCEL();
             }
         }
         //nw je koloko ucenika moze da stane u jedan res
@@ -97,16 +57,19 @@ namespace Dnevnik_2._0
         {
             this.Size = new Size(1280, 720);
         }
+        public Size velicina_ekrana;
         private void Form2_Load(object sender, EventArgs e)
         {
+            Screen Srn = Screen.PrimaryScreen;
+
+            velicina_ekrana = new Size(Srn.Bounds.Width,Srn.Bounds.Height);
+            
+
             //omogucava pristup formi 1
             f1 = (Form1)Application.OpenForms[0];
 
-            
-
             conn = f1.conn2;
             conn2 = f1.conn3;
-
 
             //postavlja formu na odredjenu velicinu
             velicina_forme();
@@ -117,6 +80,8 @@ namespace Dnevnik_2._0
             //cita iz baze
             UCITAJ();
 
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = dataGridView1.RowCount * (dataGridView1.ColumnCount-1);
 
             //postavlja picture bog sa slikom i eventom da kad kliknes na taj picture box
             foreach (var pic in p)
@@ -152,26 +117,89 @@ namespace Dnevnik_2._0
             {
                 button1.Text = "Excel";
                 dataGridView1.Show();
-                this.Width = dataGridView1.Width+dataGridView1.Location.X;
+                int d = dataGridView1.Width + dataGridView1.Location.X;
+                MessageBox.Show(velicina_ekrana.Width.ToString());
+                if (d < velicina_ekrana.Width)
+                {
+                    this.Width = d; 
+                    int dgv = dataGridView1.Height + dataGridView1.Location.Y + 39;
+                    int bh = button2.Height + button2.Location.Y + 39;
 
-                int dgv = dataGridView1.Height + dataGridView1.Location.Y+39;
-                int bh = button2.Height + button2.Location.Y+39;
-                if (dgv > bh)
-                    this.Height = dgv;
+                    if (dgv > velicina_ekrana.Height)
+                    {
+                        dgv = velicina_ekrana.Height - (dataGridView1.Location.Y + 39);
+                        this.Height = dgv;
+                    }
+                    else if (dgv > bh)
+                        this.Height = dgv;
+                    else
+                        this.Height = bh;
+
+                    foreach (var item in p)
+                    {
+                        this.Controls.Remove(item);
+                    }
+                    foreach (var item in l)
+                    {
+                        this.Controls.Remove(item);
+                    }
+                    
+
+                }
                 else
-                    this.Height = bh;
-                foreach (var item in p)
                 {
-                    this.Controls.Remove(item);
-                }
-                foreach (var item in l)
-                {
-                    this.Controls.Remove(item);
-                }
-                
+                    MessageBox.Show("Horizontala vaseg monitora je mala da bi pokazala ocene. Excel sa ocenama se pokrece");
+                    EXCEL();
+                }   
             }
         }
+        public void EXCEL()
+        {
+            progressBar1.Show();
+            progressBar1.Value = 0;
 
+            //Putanja fajla
+            string putanja = "Ocene.xlsx";
+            //worksheet.Cells.AutoFit();
+
+            Microsoft.Office.Interop.Excel._Application app = new Microsoft.Office.Interop.Excel.Application();
+            Microsoft.Office.Interop.Excel._Workbook workbook = app.Workbooks.Add(Type.Missing);
+            Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
+            app.Visible = true;
+
+
+            worksheet = workbook.Sheets["Sheet1"];
+            worksheet = workbook.ActiveSheet;
+            worksheet.Columns.AutoFit();
+
+
+            for (int i = 1; i < dataGridView1.Columns.Count + 1; i++)
+            {
+                worksheet.Cells[1, i] = dataGridView1.Columns[i - 1].HeaderText;
+            }
+            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            {
+                for (int j = 0; j < dataGridView1.Columns.Count; j++)
+                {
+                    progressBar1.Value += 1;
+                    if (dataGridView1.Rows[i].Cells[j].Value != null)
+                    {
+                        worksheet.Cells[i + 2, j + 1] = dataGridView1.Rows[i].Cells[j].Value.ToString();
+                    }
+                    else
+                    {
+                        worksheet.Cells[i + 2, j + 1] = "";
+                    }
+                    worksheet.Columns[j + 1].AutoFit();
+
+                }
+                //MessageBox.Show(progressBar1.Value.ToString());
+            }
+            progressBar1.Hide();
+
+            //Ako hoce da se sacuva 
+            //workbook.SaveAs(putanja);
+        }
         public void UCITAJ()
         {
 
@@ -278,7 +306,7 @@ namespace Dnevnik_2._0
 
             chart1.Series.Clear();
             chart1.Series.Add("s1");
-            chart1.Series["s1"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            //chart1.Series["s1"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
 
             pita();
         }
