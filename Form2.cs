@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Drawing;
 using System.Windows.Forms;
+using Microsoft.Office.Interop;
+using System.IO;
+using System.Diagnostics;
 
 namespace Dnevnik_2._0
 {
@@ -36,10 +39,57 @@ namespace Dnevnik_2._0
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (chart1.Visible)
-                chart1.Hide();
+            if (!dataGridView1.Visible)
+            {
+                if (chart1.Visible)
+                    chart1.Hide();
+                else
+                    chart1.Show();
+            }
             else
-                chart1.Show();
+            {
+                string putanja = "Ocene.xlsx";
+                //worksheet.Cells.AutoFit();
+                if (!File.Exists(putanja))
+                {
+
+                    Microsoft.Office.Interop.Excel._Application app = new Microsoft.Office.Interop.Excel.Application();
+                    Microsoft.Office.Interop.Excel._Workbook workbook = app.Workbooks.Add(Type.Missing);
+                    Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
+                    app.Visible = true;
+
+                    
+                    worksheet = workbook.Sheets["Sheet1"];
+                    worksheet = workbook.ActiveSheet;
+                    worksheet.Columns.AutoFit();
+                    //worksheet.Range["E2"].AutoFit();
+
+                    for (int i = 1; i < dataGridView1.Columns.Count + 1; i++)
+                    {
+                        worksheet.Cells[1, i] = dataGridView1.Columns[i - 1].HeaderText;
+                    }
+                    for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+                    {
+                        for (int j = 0; j < dataGridView1.Columns.Count; j++)
+                        {
+                            if (dataGridView1.Rows[i].Cells[j].Value != null)
+                            {
+                                worksheet.Cells[i + 2, j + 1] = dataGridView1.Rows[i].Cells[j].Value.ToString();
+                                worksheet.Columns[j + 1].AutoFit();
+                            }
+                            else
+                            {
+                                worksheet.Cells[i + 2, j + 1] = "";
+                            }
+                        }
+                    }
+                    workbook.SaveAs(putanja);
+                }
+                else
+                {
+                    Process.Start(putanja);
+                }
+            }
         }
         //nw je koloko ucenika moze da stane u jedan res
         double nw;
@@ -96,9 +146,11 @@ namespace Dnevnik_2._0
                 {
                     this.Controls.Add(item);
                 }
+                button1.Text = "Statistika";
             }
             else
             {
+                button1.Text = "Excel";
                 dataGridView1.Show();
                 this.Width = dataGridView1.Width+dataGridView1.Location.X;
 
@@ -116,6 +168,7 @@ namespace Dnevnik_2._0
                 {
                     this.Controls.Remove(item);
                 }
+                
             }
         }
 
@@ -204,7 +257,7 @@ namespace Dnevnik_2._0
             }
             conn.Close();
             pita();
-            MessageBox.Show(dataGridView1.RowCount.ToString());
+            //MessageBox.Show(dataGridView1.RowCount.ToString());
         }
 
         private void Form2_Resize(object sender, EventArgs e)
