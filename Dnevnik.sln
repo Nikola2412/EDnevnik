@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dnevnik 2.0", "Dnevnik 2.0.csproj", "{EB0850AA-B2DA-42D4-968A-27819F75AC48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dnevnik", "Dnevnik.csproj", "{EB0850AA-B2DA-42D4-968A-27819F75AC48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

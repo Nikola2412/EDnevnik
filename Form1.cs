@@ -43,7 +43,7 @@ namespace Dnevnik_2._0
                         //ako se podaci poklapaju druga forma se ucitava
                         f2 = new Form2();
                         f2.id_nastavnika = sqlite_datareader.GetInt16(0);
-                        f2.username = u;f2.password = p;
+                        f2.username = u;// f2.password = p;
                         f2.Show();
                         this.Hide();
                     }
@@ -70,12 +70,12 @@ namespace Dnevnik_2._0
                     if (p == sqlite_datareader.GetString(4))
                     {
                         //ako se podaci poklapaju druga forma se ucitava
-                        Form5 f5 = new Form5();
-                        f5.index = sqlite_datareader.GetInt32(0);
-                        f5.ime = sqlite_datareader.GetString(1);
-                        f5.pol = sqlite_datareader.GetBoolean(5);
-                        f5.Show();
-                        this.Hide();
+                        //Form5 f5 = new Form5();
+                        //f5.index = sqlite_datareader.GetInt32(0);
+                        //f5.ime = sqlite_datareader.GetString(1);
+                        //f5.pol = sqlite_datareader.GetBoolean(5);
+                        //f5.Show();
+                        //this.Hide();
                     }
                     else
                         MessageBox.Show("Pogresna lozinka");
