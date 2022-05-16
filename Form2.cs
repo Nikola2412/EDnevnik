@@ -19,6 +19,7 @@ namespace Dnevnik_2._0
             InitializeComponent();
         }
         public int id_nastavnika;
+        public int id_predmeta;
         public string username;
         Form1 f1;
         Form3 f3;
@@ -141,7 +142,8 @@ namespace Dnevnik_2._0
                 x = Math.Max(comboBox1.Width + comboBox1.Location.X, label1.Width + label1.Location.X) + 20;
             }
         }
-
+        //test
+        //setting u buducnosti
         private void button1_Click(object sender, EventArgs e)
         {
             MessageBox.Show($"{x}-{nw}-{this.Size}");
@@ -235,6 +237,7 @@ namespace Dnevnik_2._0
                 if (item.id_odeljenja == id)
                 {
                     f3.id_odeljenja = item.id_odeljenja;
+                    f3.id_predmeta = id_predmeta;
                     f3.ind = n;
                     f3.Show();
                     this.Hide();

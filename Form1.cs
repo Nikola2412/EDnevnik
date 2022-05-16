@@ -43,6 +43,7 @@ namespace Dnevnik_2._0
                         //ako se podaci poklapaju druga forma se ucitava
                         f2 = new Form2();
                         f2.id_nastavnika = sqlite_datareader.GetInt16(0);
+                        f2.id_predmeta = sqlite_datareader.GetInt16(5);
                         f2.username = u;// f2.password = p;
                         f2.Show();
                         this.Hide();
