@@ -33,7 +33,7 @@ namespace Dnevnik_2._0
 
         public List<PictureBox> p = new List<PictureBox>();
         public List<Label> l = new List<Label>();
-        int jedinice, dvojke, trojke, cetvorke, petice = 0;
+        public int jedinice, dvojke, trojke, cetvorke, petice = 0;
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -71,6 +71,11 @@ namespace Dnevnik_2._0
             }
         }
 
+        private void Form3_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            f2.Show();
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             if (dataGridView1.Visible)
@@ -101,9 +106,14 @@ namespace Dnevnik_2._0
                 {
                     this.Controls.Remove(item);
                 }
+                if(dataGridView1.Height > this.Height-10)
+                {
+                    dataGridView1.Height = this.Height - 10;
+                }
             }
         }
         Size s;
+        int h;
         private void Form3_Load(object sender, EventArgs e)
         {
             s = this.Size;
@@ -112,7 +122,7 @@ namespace Dnevnik_2._0
             conn = f2.conn;
             conn2 = f2.conn2;
 
-            dataGridView1.Height = dataGridView1.RowHeadersWidth;
+            h = dataGridView1.Height = dataGridView1.RowHeadersWidth;
             //MessageBox.Show(id_predmeta.ToString());
             Kalkulacije_broja_ucenika();
 
@@ -132,7 +142,11 @@ namespace Dnevnik_2._0
         //settings
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            
+            Form4 f3 = new Form4();
+            f3.ind = ind;
+            f3.id_predmeta = id_predmeta;
+            f3.index = int.Parse(((PictureBox)sender).Name);
+            f3.Show();
         }
         public void kordinate()
         {
@@ -160,7 +174,6 @@ namespace Dnevnik_2._0
 
         public void ucitaj()
         {
-            f2.o[ind].u.Clear();
 
             conn.Open();
 
@@ -172,7 +185,7 @@ namespace Dnevnik_2._0
             sqlite_cmd = conn.CreateCommand();
             sqlite_cmd.CommandText = $"SELECT * FROM Ucenik where ID_odeljenja = {id_odeljenja}";
 
-            //MessageBox.Show(id_predmeta.ToString());
+            
             sqlite_datareader = sqlite_cmd.ExecuteReader();
             while (sqlite_datareader.Read())
             {
@@ -187,20 +200,18 @@ namespace Dnevnik_2._0
 
                 //komanda za citanje
                 sqlite_cmd2 = conn2.CreateCommand();
-                sqlite_cmd2.CommandText = $"SELECT * FROM Ocena Where ID_ucenika = {index} and ID_predmeta = 1";
+                sqlite_cmd2.CommandText = $"SELECT * FROM Ocena WHERE ID_ucenika = {index} and id_predmeta = {id_predmeta}";
 
                 sqlite_datareader2 = sqlite_cmd2.ExecuteReader();
                 int srednja = 0;
 
                 dataGridView1.Rows.Add(uc);
-                if(dataGridView1.Height<s.Height)
-                    dataGridView1.Height += dataGridView1.RowHeadersWidth;
 
                 //cita ocene i broj da li su 5, 4, 3, 2 ili 1 da bi se uradila pita 
                 while (sqlite_datareader2.Read())
                 {
-                    int ocena = sqlite_datareader2.GetInt16(2);
-                    string opis = sqlite_datareader2.GetString(4);
+                    int ocena = sqlite_datareader2.GetInt16(3);
+                    string opis = sqlite_datareader2.GetString(5);
                     o.Add(Tuple.Create(ocena, opis));
                     srednja += ocena;
                     if (ocena == 5)
@@ -214,8 +225,7 @@ namespace Dnevnik_2._0
                     else
                         jedinice++;
                     //izdvaja mesec iz datuma
-                    int dt = int.Parse(sqlite_datareader2.GetString(3).Split('-')[1]);
-                    dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString()+" ";
+                    int dt = int.Parse(sqlite_datareader2.GetString(4).Split('-')[1]);
                     dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString() + " ";
                 }
                 //raspodela ucenika po ekranu
@@ -226,7 +236,7 @@ namespace Dnevnik_2._0
 
                 f2.o[ind].u.Add(new ucenik(uc, o, srednja, sqlite_datareader.GetInt16(0), sqlite_datareader.GetBoolean(5)));
 
-                dataGridView1.Rows[n].Cells["prosek"].Value = f2.o[ind].u[n].srednja;
+                dataGridView1.Rows[n].Cells["prosek"].Value = f2.o[ind].u[n].srednja.ToString("0.00");
                 //pomera u desno
                 x += a + rw;
                 n++;
@@ -237,9 +247,9 @@ namespace Dnevnik_2._0
                     y += b + rh;
                     x = 100;
                 }
-
             }
             conn.Close();
+            dataGridView1.Height = Math.Max(p.Count,2) * h;
         }
         public void Raspodela(string uc, bool pol)
         {

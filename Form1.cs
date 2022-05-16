@@ -117,10 +117,10 @@ namespace Dnevnik_2._0
 
         public void Putanje()
         {
-            put = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Baze za Dnavnik 2.0");
+            put = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EsDnevnik");
             if (!System.IO.Directory.Exists(put))
                 Directory.CreateDirectory(put);
-            baze = "Baze.db";
+            baze = put+"/Baze.db";
             //sqlite konekcije
             conn = new SQLiteConnection(String.Format($"Data Source={baze};Version=3;"));
             conn2 = new SQLiteConnection(String.Format($"Data Source={baze};Version=3;"));
@@ -128,45 +128,45 @@ namespace Dnevnik_2._0
 
             SQLiteCommand cmd;
             //Provera da li baza postoji
-            if (!File.Exists(baze))
-            {
-                SQLiteConnection.CreateFile(baze);
-                conn.Open();
-                cmd = new SQLiteCommand("CREATE TABLE Nastavnik (" +
-                                                            "ID_nastavnika INTEGER PRIMARY KEY NOT NULL," +
-                                                            "Ime Varchar2(10) not null," +
-                                                            "Prezime Varchar2(10) not null," +
-                                                            "user_name varchar(20) not null," +
-                                                            "password varchar(20) not null);",
-                                                          conn);
+            //if (!File.Exists(baze))
+            //{
+            //    SQLiteConnection.CreateFile(baze);
+            //    conn.Open();
+            //    cmd = new SQLiteCommand("CREATE TABLE Nastavnik (" +
+            //                                                "ID_nastavnika INTEGER PRIMARY KEY NOT NULL," +
+            //                                                "Ime Varchar2(10) not null," +
+            //                                                "Prezime Varchar2(10) not null," +
+            //                                                "user_name varchar(20) not null," +
+            //                                                "password varchar(20) not null);",
+            //                                              conn);
 
                 
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                conn2.Open();
-                cmd = new SQLiteCommand("CREATE TABLE Ucenik (" +
-                                                            "ID_ucenika INTEGER PRIMARY KEY," +
-                                                            "Ucenik     VARCHAR (30) NOT NULL," +
-                                                            "ID_nastavnika INTEGER NOT NULL," +
-                                                            "password varchar(20) not null," +
-                                                            "Pol Boolean not null," +
-                                                            "FOREIGN KEY (ID_nastavnika) REFERENCES Nastavnik (ID_nastavnika));",
-                                                          conn2);
+            //    cmd.ExecuteNonQuery();
+            //    conn.Close();
+            //    conn2.Open();
+            //    cmd = new SQLiteCommand("CREATE TABLE Ucenik (" +
+            //                                                "ID_ucenika INTEGER PRIMARY KEY," +
+            //                                                "Ucenik     VARCHAR (30) NOT NULL," +
+            //                                                "ID_nastavnika INTEGER NOT NULL," +
+            //                                                "password varchar(20) not null," +
+            //                                                "Pol Boolean not null," +
+            //                                                "FOREIGN KEY (ID_nastavnika) REFERENCES Nastavnik (ID_nastavnika));",
+            //                                              conn2);
 
-                cmd.ExecuteNonQuery();
-                conn2.Close();
-                conn3.Open();
-                cmd = new SQLiteCommand("CREATE TABLE Ocena (" +
-                                                            "ID_ocene INTEGER PRIMARY KEY NOT NULL," +
-                                                            "ID_ucenika      INTEGER NOT NULL," +
-                                                            "Ocena INTEGER NOT NULL," +
-                                                            "FOREIGN KEY (ID_ucenika) REFERENCES Ucenik (ID_ucenika));",
-                                                          conn3);
+            //    cmd.ExecuteNonQuery();
+            //    conn2.Close();
+            //    conn3.Open();
+            //    cmd = new SQLiteCommand("CREATE TABLE Ocena (" +
+            //                                                "ID_ocene INTEGER PRIMARY KEY NOT NULL," +
+            //                                                "ID_ucenika      INTEGER NOT NULL," +
+            //                                                "Ocena INTEGER NOT NULL," +
+            //                                                "FOREIGN KEY (ID_ucenika) REFERENCES Ucenik (ID_ucenika));",
+            //                                              conn3);
 
 
-                cmd.ExecuteNonQuery();
-                conn3.Close();
-            }
+            //    cmd.ExecuteNonQuery();
+            //    conn3.Close();
+            //}
 
         }
 

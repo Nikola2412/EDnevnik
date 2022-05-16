@@ -149,6 +149,11 @@ namespace Dnevnik_2._0
             MessageBox.Show($"{x}-{nw}-{this.Size}");
         }
 
+        private void Form2_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            f1.Show();
+        }
+
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             int id = int.Parse(((PictureBox)sender).Name);
