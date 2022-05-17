@@ -71,12 +71,12 @@ namespace Dnevnik_2._0
                     if (p == sqlite_datareader.GetString(4))
                     {
                         //ako se podaci poklapaju druga forma se ucitava
-                        //Form5 f5 = new Form5();
-                        //f5.index = sqlite_datareader.GetInt32(0);
-                        //f5.ime = sqlite_datareader.GetString(1);
-                        //f5.pol = sqlite_datareader.GetBoolean(5);
-                        //f5.Show();
-                        //this.Hide();
+                        Form6 f6 = new Form6();
+                        f6.index = sqlite_datareader.GetInt32(0);
+                        f6.ime = sqlite_datareader.GetString(1);
+                        f6.pol = sqlite_datareader.GetBoolean(5);
+                        f6.Show();
+                        this.Hide();
                     }
                     else
                         MessageBox.Show("Pogresna lozinka");
@@ -120,13 +120,13 @@ namespace Dnevnik_2._0
             put = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EsDnevnik");
             if (!System.IO.Directory.Exists(put))
                 Directory.CreateDirectory(put);
-            baze = put+"/Baze.db";
+            baze = "Baze.db";
             //sqlite konekcije
             conn = new SQLiteConnection(String.Format($"Data Source={baze};Version=3;"));
             conn2 = new SQLiteConnection(String.Format($"Data Source={baze};Version=3;"));
             conn3 = new SQLiteConnection(String.Format($"Data Source={baze};Version=3;"));
 
-            SQLiteCommand cmd;
+            //SQLiteCommand cmd;
             //Provera da li baza postoji
             //if (!File.Exists(baze))
             //{
