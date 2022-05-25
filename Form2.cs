@@ -251,6 +251,7 @@ namespace Dnevnik_2._0
             }
             
 ;       }
+        
         public string raz_ime(int a,int b)
         {
             return $"{a}-{b}";

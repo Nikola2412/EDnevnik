@@ -133,6 +133,6 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button6;
+        public System.Windows.Forms.Button button6;
     }
 }

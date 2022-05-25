@@ -18,25 +18,58 @@ namespace Dnevnik_2._0
         }
 
         Form4 f4;
+        List<Button> b = new List<Button>();
+        public bool izmeni = false;
         private void Form4_Load(object sender, EventArgs e)
         {
             f4 = (Form4)Application.OpenForms[3];
+            b.Add(button1);
+            b.Add(button2);
+            b.Add(button3);
+            b.Add(button4);
+            b.Add(button5);
+            if (izmeni)
+            {
+                izmena();
+            }
         }
-        int ocena;
+        public int ocena;
+        public string opis;
         private void button1_Click(object sender, EventArgs e)
         {
 
             //detektuje koje dugme je pritinusto
             ocena = int.Parse(((Button)sender).Text);
+            foreach (var item in b)
+            {
+                item.BackColor = DefaultBackColor;
+                item.ForeColor = DefaultForeColor;
+            }
+            ((Button)sender).BackColor = Color.Aqua;
+            ((Button)sender).ForeColor = Color.Black;
         }
-
+        public void izmena()
+        {
+            textBox1.Text = opis;
+            //MessageBox.Show(ocena.ToString());
+            b[ocena-1].BackColor = Color.Aqua;
+            b[ocena-1].ForeColor = Color.Black;
+        }
         private void button6_Click(object sender, EventArgs e)
         {
             //salje ocenu i opis ocene
             if (textBox1.Text != "")
             {
-                f4.UPISI_U_BAAZU(ocena, textBox1.Text);
-                f4.Show();
+                if (!izmeni)
+                {
+                    f4.UPISI_U_BAAZU(ocena, textBox1.Text);
+                    f4.Show();
+                }
+                else
+                {
+                    Form7 f7 = (Form7)Application.OpenForms["Form7"];
+                    f7.potvrdi(ocena, textBox1.Text);
+                }
                 this.Close();
             }
             else

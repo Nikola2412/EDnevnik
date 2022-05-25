@@ -18,7 +18,7 @@ namespace Dnevnik_2._0
             InitializeComponent();
         }
 
-        public SQLiteConnection conn;
+        public SQLiteConnection conn,conn2;
         public int index;
         int y;
         int x;
@@ -29,35 +29,44 @@ namespace Dnevnik_2._0
         int a, b;
         List<Button> buttons = new List<Button>();
         int strana = 40;
-        List<int> o = new List<int>();
+        List<Tuple<int,int>> o = new List<Tuple<int,int>>();
         int border = 20;
-        public int ind;
+        public int ind;//index odeljenja
         public int id_predmeta;
+        public int id_poslednje_ocene;
 
         private void Form3_Load(object sender, EventArgs e)
         {
             //MessageBox.Show(f2.o[ind].u.Count().ToString());
-            
             //MessageBox.Show(DateTime.Now.ToString("yyyy-M-d"));
             f3 = (Form3)Application.OpenForms[2];
             f2 = (Form2)Application.OpenForms[1];
+            conn = f3.conn2;
+            conn2 = f3.conn2;
+            najveci_id_ocene();
             x_y();
             a = f3.a;
             b = f3.b;
             pictureBox1.Size = new Size(a, b);
             CITAJ();
         }
-
+        public void najveci_id_ocene()
+        {
+            SQLiteCommand cmd=new SQLiteCommand(String.Format("Select max(id_ocene) from Ocena"),conn);
+            conn.Open();
+            id_poslednje_ocene = Convert.ToInt32(cmd.ExecuteScalar())+1;
+            conn.Close();
+            //MessageBox.Show(id_poslednje_ocene.ToString());
+        }
         private void button3_Click(object sender, EventArgs e)
         {
-            Form5 f4 = new Form5();
-            f4.ShowDialog();
+            Form5 f5 = new Form5();
+            f5.ShowDialog();
             //this.Hide();
         }
         public void UPISI_U_BAAZU(int ocena, string opis)
         {
             SQLiteCommand cmd;
-            conn = f3.conn2;
 
             try
             {
@@ -78,7 +87,7 @@ namespace Dnevnik_2._0
                 //zatvara konekciju
                 conn.Close();
                 //dodaje u klacu tog ucenika
-                f2.o[ind].u[index].Ocena_opis.Add(Tuple.Create(ocena, opis));
+                f2.o[ind].u[index].id_Ocena_opis.Add(Tuple.Create(id_poslednje_ocene,ocena, opis));
                 //ponovo ucitava
                 CITAJ();
                 if (ocena == 5)
@@ -128,9 +137,9 @@ namespace Dnevnik_2._0
 
             pictureBox1.Image = f3.p[index].Image;
             //dajaje u listu ocena
-            foreach (Tuple<int, string> ocena in f2.o[ind].u[index].Ocena_opis)
+            foreach (Tuple<int,int, string> ocena in f2.o[ind].u[index].id_Ocena_opis)
             {
-                o.Add(ocena.Item1);
+                o.Add(Tuple.Create(ocena.Item1,ocena.Item2));
             }
             ime = f2.o[ind].u[index].UCENIK;
             label1.Text = ime;
@@ -156,7 +165,7 @@ namespace Dnevnik_2._0
                 buttons.Add(new Button {
                     Name = n.ToString(),
                     Size = new Size(strana, strana),
-                    Text = item.ToString(),
+                    Text = item.Item2.ToString(),
                     Location = new Point(x, y)
 
                 });
@@ -202,12 +211,30 @@ namespace Dnevnik_2._0
         {
             f3.Show();
         }
-
+        public void brisanje()
+        {
+            f2.o[ind].u[index].id_Ocena_opis.RemoveAt(i);
+            CITAJ();
+        }
+        public void update()
+        {
+            f2.o[ind].u.Clear();
+            f3.ucitaj();
+            CITAJ();
+            //f2.o[ind].u[index].id_Ocena_opis[i].Item3 = s;
+        }
+        int i;
         private void klik(object sender, EventArgs e)
         {
             //izvlaci opis
-            int i = int.Parse(((Button)sender).Name);
-            MessageBox.Show(f2.o[ind].u[index].Ocena_opis[i - 1].Item2);
+            i = int.Parse(((Button)sender).Name)-1;
+            Form7 f7 = new Form7();
+            f7.id_ocene = o[i].Item1;
+            f7.ocena = o[i].Item2;
+           
+            f7.ShowDialog();
+            //MessageBox.Show(o[i].Item1.ToString() + " " + o[i].Item2.ToString());
+            //MessageBox.Show(f2.o[ind].u[index].id_Ocena_opis[i - 1].Item3);
         }
     }
 }

@@ -174,7 +174,11 @@ namespace Dnevnik_2._0
 
         public void ucitaj()
         {
-
+            dataGridView1.Rows.Clear();
+            p.Clear();
+            l.Clear();
+            h = dataGridView1.Height = dataGridView1.RowHeadersWidth;
+            n = 0;
             conn.Open();
 
             SQLiteDataReader sqlite_datareader;
@@ -190,7 +194,7 @@ namespace Dnevnik_2._0
             while (sqlite_datareader.Read())
             {
                 //tuple ocena,opis ocene
-                List<Tuple<int, string>> o = new List<Tuple<int, string>>();
+                List<Tuple<int,int, string>> o = new List<Tuple<int,int, string>>();
 
 
                 int index = sqlite_datareader.GetInt16(0);
@@ -211,8 +215,9 @@ namespace Dnevnik_2._0
                 while (sqlite_datareader2.Read())
                 {
                     int ocena = sqlite_datareader2.GetInt16(3);
+                    int id = sqlite_datareader2.GetInt16(0);
                     string opis = sqlite_datareader2.GetString(5);
-                    o.Add(Tuple.Create(ocena, opis));
+                    o.Add(Tuple.Create(id,ocena, opis));
                     srednja += ocena;
                     if (ocena == 5)
                         petice++;

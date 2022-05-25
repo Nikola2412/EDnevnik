@@ -88,6 +88,7 @@ namespace Dnevnik_2._0
             int index_ocene = int.Parse(((Button)sender).Name);
             //opis ocene 
             //MessageBox.Show(opis[index_ocene]);
+            //Form7 f7 = new Form7();
         }
         public void kalkulacija()
         {
@@ -123,9 +124,6 @@ namespace Dnevnik_2._0
                     {
                         int qw = 50;
                         y += strana + qw;
-                        //Graphics grap = CreateGraphics();
-                        //Pen p = new Pen(Color.Black, 3);
-                        //grap.DrawLine(p,0,y,ClientRectangle.Width,y);
                     }
                     sqlite_cmd2 = conn.CreateCommand();
                     sqlite_cmd2.CommandText = $"SELECT predmet FROM predmet where id_predmeta = {id_predmeta}";
