@@ -122,7 +122,6 @@ namespace Dnevnik_2._0
             conn = f2.conn;
             conn2 = f2.conn2;
 
-            h = dataGridView1.Height = dataGridView1.RowHeadersWidth;
             //MessageBox.Show(id_predmeta.ToString());
             Kalkulacije_broja_ucenika();
 
@@ -172,8 +171,7 @@ namespace Dnevnik_2._0
                 nw = 1;
             
         }
-
-        public void ucitaj()
+        public void ukoloni()
         {
             foreach (var item in p)
             {
@@ -183,6 +181,11 @@ namespace Dnevnik_2._0
             {
                 this.Controls.Remove(item);
             }
+        }
+
+        public void ucitaj()
+        {
+            ukoloni();
             kordinate();
             dataGridView1.Rows.Clear();
             dataGridView1.Hide();
@@ -221,6 +224,7 @@ namespace Dnevnik_2._0
                 int srednja = 0;
 
                 dataGridView1.Rows.Add(uc);
+                dataGridView1.Height += h;
 
                 //cita ocene i broj da li su 5, 4, 3, 2 ili 1 da bi se uradila pita 
                 while (sqlite_datareader2.Read())
@@ -265,7 +269,7 @@ namespace Dnevnik_2._0
                 }
             }
             conn.Close();
-            dataGridView1.Height = Math.Max(p.Count,2) * h;
+            //dataGridView1.Height = Math.Max(p.Count,2) * h;
             postavi();
             
         }

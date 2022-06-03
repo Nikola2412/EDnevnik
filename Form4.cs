@@ -43,7 +43,7 @@ namespace Dnevnik_2._0
             f2 = (Form2)Application.OpenForms[1];
             conn = f3.conn2;
             conn2 = f3.conn2;
-            najveci_id_ocene();
+            
             x_y();
             a = f3.a;
             b = f3.b;
@@ -87,6 +87,7 @@ namespace Dnevnik_2._0
                 //zatvara konekciju
                 conn.Close();
                 //dodaje u klacu tog ucenika
+                najveci_id_ocene();
                 f2.o[ind].u[index].id_Ocena_opis.Add(Tuple.Create(id_poslednje_ocene,ocena, opis));
                 //ponovo ucitava
                 CITAJ();
