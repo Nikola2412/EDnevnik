@@ -55,6 +55,7 @@ namespace Dnevnik_2._0
         }
         public void potvrdi(int ocena,string s)
         {
+            button1.Text= ocena.ToString();
             conn.Open();
             SQLiteCommand cmd = new SQLiteCommand(String.Format($"update ocena set ocena = {ocena} where id_ocene = {id_ocene}"),conn);
             //SQLiteCommand cmd2 = new SQLiteCommand(String.Format($"update ocena set opis = {s} where id_ocene = {id_ocene}"),conn);

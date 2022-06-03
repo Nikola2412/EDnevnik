@@ -127,7 +127,9 @@ namespace Dnevnik_2._0
             Kalkulacije_broja_ucenika();
 
             ucitaj();
-
+        }
+        public void postavi()
+        {
             foreach (var pic in p)
             {
                 pic.Click += new EventHandler(pictureBox1_Click);
@@ -150,7 +152,7 @@ namespace Dnevnik_2._0
         }
         public void kordinate()
         {
-            x = Math.Max(button1.Width + button1.Location.X, label1.Width + label1.Location.X) + 20; ;
+            x = Math.Max(button1.Width + button1.Location.X, label1.Width + label1.Location.X) + 20;
 
             y = border;
         }
@@ -169,12 +171,21 @@ namespace Dnevnik_2._0
             if (nw < 1)
                 nw = 1;
             
-
         }
 
         public void ucitaj()
         {
+            foreach (var item in p)
+            {
+                this.Controls.Remove(item);
+            }
+            foreach (var item in l)
+            {
+                this.Controls.Remove(item);
+            }
+            kordinate();
             dataGridView1.Rows.Clear();
+            dataGridView1.Hide();
             p.Clear();
             l.Clear();
             h = dataGridView1.Height = dataGridView1.RowHeadersWidth;
@@ -250,11 +261,13 @@ namespace Dnevnik_2._0
                 if (n % nw == 0)
                 {
                     y += b + rh;
-                    x = 100;
+                    x = Math.Max(button1.Width + button1.Location.X, label1.Width + label1.Location.X) + 20;
                 }
             }
             conn.Close();
             dataGridView1.Height = Math.Max(p.Count,2) * h;
+            postavi();
+            
         }
         public void Raspodela(string uc, bool pol)
         {

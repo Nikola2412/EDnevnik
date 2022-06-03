@@ -170,7 +170,7 @@ namespace Dnevnik_2._0
         public void Prosek()
         {
             //prosek
-            double d = (5 * petice + 4 * cetvorke + 3 * trojke + 2 * dvojke + jedinice) / n;
+            //double d = (5 * petice + 4 * cetvorke + 3 * trojke + 2 * dvojke + jedinice) / n;
         }
     }
 }

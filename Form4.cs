@@ -100,6 +100,7 @@ namespace Dnevnik_2._0
                     f3.dvojke++;
                 else
                     f3.jedinice++;
+                update();
             }
 
         }

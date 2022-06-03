@@ -64,7 +64,7 @@ namespace Dnevnik_2._0
             foreach (var item in l)
             {
                 if (item.Text == od_raz)
-                    forma3(int.Parse(item.Name));
+                    forma3(int.Parse(item.Name),od_raz);
             }
         }
 
@@ -157,7 +157,7 @@ namespace Dnevnik_2._0
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             int id = int.Parse(((PictureBox)sender).Name);
-            forma3(id);
+            forma3(id, l[id-1].Text);
         }
         public void sakupi_odeljenja()
         {
@@ -232,10 +232,11 @@ namespace Dnevnik_2._0
             });
 
         }
-        public void forma3(int id)
+        public void forma3(int id,string ime)
         {
             f3 = new Form3();
             //MessageBox.Show(o[0].id_odeljenja.ToString());
+            f3.Text = ime;
             int n = 0;
             foreach (var item in o)
             {

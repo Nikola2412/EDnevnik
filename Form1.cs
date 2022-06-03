@@ -19,7 +19,7 @@ namespace Dnevnik_2._0
         {
             InitializeComponent();
         }
-        bool profesor = false;
+        int k;
         public string put, baze;
         public SQLiteConnection conn, conn2, conn3;
         Form2 f2;
@@ -84,17 +84,30 @@ namespace Dnevnik_2._0
             }
             conn.Close();
         }
+        public void login_adim(string u,string p)
+        {
+            //if (u == "admin" && p == "admin")
+            //{
+                Form8 f8 = new Form8();
+                f8.Show();
+                this.Hide();
+            //}
+        }
 
         private void button3_Click(object sender, EventArgs e)
         {
             //proverava se koj buttons se klikne
-            if (profesor)
+            if (k==1)
             {
                 login_nastavnika(textBox1.Text,textBox2.Text);
             }
-            else
+            else if(k==2)
             {
                 login_ucenika(textBox1.Text, textBox2.Text);
+            }
+            else
+            {
+                login_adim(textBox1.Text, textBox2.Text);
             }
         }
         public void pocetni()
@@ -103,7 +116,8 @@ namespace Dnevnik_2._0
             button1.Show();
             button2.Show();
             button4.Hide();
-            this.Size = new Size(250, 140);
+            button5.Show();
+            this.Size = new Size(280, 100);
             Putanje();
             groupBox1.Visible = false;
             textBox1.Text = "";
@@ -175,6 +189,12 @@ namespace Dnevnik_2._0
             pocetni();
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            k = 3;
+            Log_in_scr();
+        }
+
         public void Log_in_scr()
         {
             //Login screen
@@ -183,19 +203,19 @@ namespace Dnevnik_2._0
             this.Size = new Size(300,300);
             button1.Visible = false;
             button2.Visible = false;
-
+            button5.Hide();
         }
         //proverava se koj je buttnon kliknuo korisnik
         //vazi sa dva voida ispod ovog komentara
         private void button1_Click(object sender, EventArgs e)
         {
-            profesor = true;
+            k = 1;
             Log_in_scr();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            profesor = false;
+            k = 2;
             Log_in_scr();
         }
     }
