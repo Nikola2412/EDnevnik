@@ -86,12 +86,12 @@ namespace Dnevnik_2._0
         }
         public void login_adim(string u,string p)
         {
-            //if (u == "admin" && p == "admin")
-            //{
+            if (u == "admin" && p == "admin")
+            {
                 Form8 f8 = new Form8();
                 f8.Show();
                 this.Hide();
-            //}
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
