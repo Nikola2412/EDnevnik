@@ -161,5 +161,10 @@ namespace Dnevnik_2._0
             sqlite_cmd.ExecuteNonQuery();
             conn.Close();
         }
+
+        private void Form8_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            f1.Show();
+        }
     }
 }

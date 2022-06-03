@@ -228,6 +228,7 @@
             this.Controls.Add(this.comboBox1);
             this.Name = "Form8";
             this.Text = "Form8";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form8_FormClosing);
             this.Load += new System.EventHandler(this.Form8_Load);
             this.UCENIK.ResumeLayout(false);
             this.UCENIK.PerformLayout();
