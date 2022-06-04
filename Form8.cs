@@ -22,6 +22,7 @@ namespace Dnevnik_2._0
         public string[] pol = {"zenski","muski"};
         public string[] imena = {"Marko", "Milos", "Matija", "Stefan","Vlada" };
         public string[] prezimena = { "Markovic", "Rukavina", "Zdravkovic", "Lazic", "Bogdanov" };
+        public string[] predmeti = {"Informatika","Biologija", "Likovno","Muzicko"};
         //List<Tuple<int, string>> id_odeljenje = new List<Tuple<int, string>>();
         List<int> id_o = new List<int>();
         Form1 f1;
@@ -37,6 +38,7 @@ namespace Dnevnik_2._0
             }
             f1 = (Form1)Application.OpenForms[0];
             UCENIK.Hide();
+            random();
         }
         public void ucitaj_razrede()
         {
@@ -75,30 +77,50 @@ namespace Dnevnik_2._0
             }
             conn.Close();
         }
-        //ispistuje ucenike random
-        //public void random()
-        //{
-        //    Random r = new Random();
-        //    conn = f1.conn2;
-        //    SQLiteCommand sqlite_cmd;
-        //    conn.Open();
-        //    for (int i = 0; i < 2; i++)
-        //    {
-        //        string ucenik, username, password;
-        //        int index = r.Next(1, 3);
-        //        int pol = r.Next(1, 3);
-        //        string ime = imena[r.Next(imena.Length)];
-        //        string prezime = prezimena[r.Next(prezimena.Length)];
-        //        ucenik = ime + " " + prezime;
-        //        username = ime[r.Next(ime.Length)] +""+ prezime[r.Next(prezime.Length)];
-        //        password = "123";
-                
-        //        sqlite_cmd = new SQLiteCommand(String.Format("insert into Ucenik(Ucenik,ID_odeljenja,username,password,pol) values('{0}',{1},'{2}','{3}','{4}');",
-        //            ucenik, index, username, password, pol), conn);
-        //        sqlite_cmd.ExecuteNonQuery();
-        //    }
-        //    conn.Close();
-        //}
+        //ispistuje ucenike/odeljenja i povezuje random
+        public void random()
+        {
+            //Random r = new Random();
+            //conn = f1.conn2;
+            //SQLiteCommand sqlite_cmd;
+            //conn.Open();
+
+            //    for (int i = 0; i < 2; i++)
+            //    {
+            //        string ucenik, username, password;
+            //        int index = r.Next(1, 3);
+            //        int pol = r.Next(1, 3);
+            //        string ime = imena[r.Next(imena.Length)];
+            //        string prezime = prezimena[r.Next(prezimena.Length)];
+            //        ucenik = ime + " " + prezime;
+            //        username = ime[r.Next(ime.Length)] +""+ prezime[r.Next(prezime.Length)];
+            //        password = "123";
+
+            //        sqlite_cmd = new SQLiteCommand(String.Format("insert into Ucenik(Ucenik,ID_odeljenja,username,password,pol) values('{0}',{1},'{2}','{3}','{4}');",
+            //            ucenik, index, username, password, pol), conn);
+            //        sqlite_cmd.ExecuteNonQuery();
+            //    }
+
+            //for (int j = 1; j < 11; j++)
+            //{
+            //    if (j != 9 || j != 10)
+            //    {
+            //        sqlite_cmd = new SQLiteCommand(String.Format("insert into Odeljenje(Razred,naziv) values('{0}',{1});",
+            //        3, j), conn);
+            //        sqlite_cmd.ExecuteNonQuery();
+            //    }
+            //}
+            //for (int i = 0; i < 15; i++)
+            //{
+            //    foreach (var item in predmeti)
+            //    {
+            //        sqlite_cmd = new SQLiteCommand(String.Format("insert into Odeljenje_nastavnik(id_odeljenja,Id_nastavnika) values('{0}',{1});",
+            //        r.Next(1,41), r.Next(1,3)), conn);
+            //        sqlite_cmd.ExecuteNonQuery();
+            //    }
+            //}
+            //conn.Close();
+        }
         public void add_ucenik()
         {
             UCENIK.Show();
@@ -107,8 +129,11 @@ namespace Dnevnik_2._0
         }
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
+            comboBox2.Items.Clear();
+            comboBox2.Text = "";
             int razred = int.Parse(comboBox4.Text);
             ucitaj_odeljenja(razred);
+            
             comboBox2.Enabled = true;
         }
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)

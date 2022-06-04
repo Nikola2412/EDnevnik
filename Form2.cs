@@ -84,7 +84,7 @@ namespace Dnevnik_2._0
         }
         public void kordinate()
         {
-            x = Math.Max(comboBox1.Width+comboBox1.Location.X,label1.Width+label1.Location.X)+20;
+            dx();
 
             y = border;
         }
@@ -203,7 +203,7 @@ namespace Dnevnik_2._0
                     if (n % nw == 0)
                     {
                         y += b + rh;
-                        x = Math.Max(comboBox1.Width + comboBox1.Location.X, label1.Width + label1.Location.X) + 20;
+                        dx();
                     }
                 }
                 conn2.Close();
@@ -212,6 +212,10 @@ namespace Dnevnik_2._0
 
             Postavi();
 
+        }
+        public void dx()
+        {
+            x = Math.Max(comboBox1.Width + comboBox1.Location.X, label1.Width + label1.Location.X) + 20;
         }
         public void Raspodela(int id,string odeljenje)
         {

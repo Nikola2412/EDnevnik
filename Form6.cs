@@ -26,7 +26,7 @@ namespace Dnevnik_2._0
         public string ime, username, password, odredi_pol;
         public bool pol;
         int x, y;
-        int n = 0;
+        //int n = 0;
         int m;
         List<Button> bu = new List<Button>();
         List<Label> la = new List<Label>();
@@ -35,8 +35,9 @@ namespace Dnevnik_2._0
         int rw = 5;
         public int petice = 0, cetvorke = 0, trojke = 0, dvojke = 0, jedinice = 0;
         //string legenda = "Ocene";
-        List<Tuple<int, int, string>> poo = new List<Tuple<int, int, string>>();
-        List<string> predmeti = new List<string>();
+        //List<Tuple<int,int, string>> P_oo = new List<Tuple<int,int, string>>();
+        //List<string> predmeti = new List<string>();
+        List<Tuple<int, string>> oo = new List<Tuple<int, string>>();
 
         private void Form5_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -87,7 +88,8 @@ namespace Dnevnik_2._0
         {
             int index_ocene = int.Parse(((Button)sender).Name);
             //opis ocene 
-            //MessageBox.Show(opis[index_ocene]);
+            MessageBox.Show(oo[index_ocene].Item2);
+            //MessageBox.Show(index_ocene.ToString());
             //Form7 f7 = new Form7();
         }
         public void kalkulacija()
@@ -108,8 +110,10 @@ namespace Dnevnik_2._0
             sqlite_cmd.CommandText = $"SELECT * FROM Ocena where ID_ucenika = {index} order by id_predmeta";
             sqlite_datareader = sqlite_cmd.ExecuteReader();
 
+            int n = 0;
             int id=0;
-            int k = 1;
+            int k = 0;
+            int id_ocene = 0;
             while (sqlite_datareader.Read())
             {
                 int id_predmeta = sqlite_datareader.GetInt16(1);
@@ -117,7 +121,9 @@ namespace Dnevnik_2._0
                 string opis = sqlite_datareader.GetString(5);
                 string predmet = "";
                 //MessageBox.Show(id_predmeta.ToString());
-                
+
+                oo.Add(Tuple.Create(ocena, opis));
+
                 if (id!=id_predmeta)
                 {
                     if (n != 0)
@@ -130,22 +136,22 @@ namespace Dnevnik_2._0
                     sqlite_datareader2 = sqlite_cmd2.ExecuteReader();
                     while(sqlite_datareader2.Read())
                         predmet=sqlite_datareader2.GetString(0);
-                    pred.Add(new Predmet(n,predmet));
+                    pred.Add(new Predmet(predmet));
                     
                     la.Add(new Label {
                         Name = n.ToString(),
                         Location = new Point(border, y),
                         Text = predmet
                     });
-                    x = la[n].Width+border+rw;
-                    k = 0;
+                    x = la[n].Width+border + rw;
                     n++;
+                    k = 0;
                 }
                 id = id_predmeta;
                 pred[n-1].ocena_opis.Add(Tuple.Create(ocena,opis));
                 
                 bu.Add(new Button {
-                    Name = k.ToString(),
+                    Name = id_ocene.ToString(),
                     Size = new Size(strana, strana),
                     Location = new Point(x, y),
                     Text = ocena.ToString(),
@@ -153,10 +159,11 @@ namespace Dnevnik_2._0
                 });
                 x += strana + rw;
                 k++;
+                id_ocene++;
                 if (k % m == 0)
                 {
                     y += strana + rw;
-                    x = la[n -1].Width + border + rw;
+                    x = la[n-1].Width + border + rw;
                 }
                 
             }
