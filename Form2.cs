@@ -170,7 +170,7 @@ namespace Dnevnik_2._0
             SQLiteCommand sqlite_cmd2;
 
             sqlite_cmd = conn.CreateCommand();
-            sqlite_cmd.CommandText = $"SELECT * FROM Odeljenje_nastavnik where Id_nastavnika = {id_nastavnika}";
+            sqlite_cmd.CommandText = $"SELECT * FROM Odeljenje_nastavnik join Odeljenje using (id_odeljenja) where Id_nastavnika = {id_nastavnika} order by razred,naziv";
 
             sqlite_datareader = sqlite_cmd.ExecuteReader();
 
