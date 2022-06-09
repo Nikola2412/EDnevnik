@@ -98,6 +98,18 @@ namespace Dnevnik_2._0
             y = pictureBox1.Location.Y + pictureBox1.Height + border;
 
         }
+        public void prosek(int n,int k)
+        {
+            pred[n - 1].racunaj();
+            //MessageBox.Show(pred[n - 1].prosek.ToString("0.00"));
+            Label label = new Label() {
+                Name = $"Prosek: {n}",
+                Text = "Prosek:"+pred[n-1].prosek.ToString("0.00"),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Location = new Point((this.Width - chart1.Location.X - border - border)/2, bu[k-1].Location.Y+50)
+            };
+            this.Controls.Add(label);
+        }
         public void Ispis()
         {
             conn.Open();
@@ -121,16 +133,18 @@ namespace Dnevnik_2._0
                 string opis = sqlite_datareader.GetString(5);
                 string predmet = "";
                 //MessageBox.Show(id_predmeta.ToString());
-
                 oo.Add(Tuple.Create(ocena, opis));
 
+                
                 if (id!=id_predmeta)
                 {
+                    
                     if (n != 0)
                     {
-                        int qw = 50;
-                        y += strana + qw;
+                        prosek(n, id_ocene);
                     }
+                    int qw = 50;
+                    y += strana + qw;
                     sqlite_cmd2 = conn.CreateCommand();
                     sqlite_cmd2.CommandText = $"SELECT predmet FROM predmet where id_predmeta = {id_predmeta}";
                     sqlite_datareader2 = sqlite_cmd2.ExecuteReader();
@@ -143,7 +157,7 @@ namespace Dnevnik_2._0
                         Location = new Point(border, y),
                         Text = predmet
                     });
-                    x = la[n].Width+border + rw;
+                    x = la[n].Width+border + rw; 
                     n++;
                     k = 0;
                 }
@@ -165,8 +179,9 @@ namespace Dnevnik_2._0
                     y += strana + rw;
                     x = la[n-1].Width + border + rw;
                 }
-                
+
             }
+            prosek(n, id_ocene);
             conn.Close();
             //MessageBox.Show(pred[1].ocena_opis.Count.ToString());
             //MessageBox.Show(bu.Count.ToString());
