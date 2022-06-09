@@ -157,7 +157,11 @@ namespace Dnevnik_2._0
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             int id = int.Parse(((PictureBox)sender).Name);
-            forma3(id, l[id-1].Text);
+            foreach (var item in l)
+            {
+                if (item.Name == id.ToString())
+                    forma3(id, item.Text);
+            }
         }
         public void sakupi_odeljenja()
         {
