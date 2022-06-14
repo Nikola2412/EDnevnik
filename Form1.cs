@@ -14,7 +14,7 @@ namespace Dnevnik_2._0
 {
     public partial class Form1 : Form
     {
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace Dnevnik_2._0
         public string put, baze;
         public SQLiteConnection conn, conn2, conn3;
         Form2 f2;
-        public void login_nastavnika(string u,string p)
+        public void login_nastavnika(string u, string p)
         {
 
             SQLiteDataReader sqlite_datareader;
@@ -34,6 +34,7 @@ namespace Dnevnik_2._0
 
             sqlite_datareader = sqlite_cmd.ExecuteReader();
             //login nastavnika, proverava se tabela "Nastavnik"
+            bool k = false;
             while (sqlite_datareader.Read())
             {
                 if (u == sqlite_datareader.GetString(3))
@@ -41,6 +42,7 @@ namespace Dnevnik_2._0
                     if (p == sqlite_datareader.GetString(4))
                     {
                         //ako se podaci poklapaju druga forma se ucitava
+                        k = true;
                         f2 = new Form2();
                         f2.id_nastavnika = sqlite_datareader.GetInt16(0);
                         f2.id_predmeta = sqlite_datareader.GetInt16(5);
@@ -53,8 +55,10 @@ namespace Dnevnik_2._0
                 }
             }
             conn.Close();
+            if (!k)
+                MessageBox.Show("Pogresan useraname");
         }
-        public void login_ucenika(string u,string p)
+        public void login_ucenika(string u, string p)
         {
             SQLiteDataReader sqlite_datareader;
             SQLiteCommand sqlite_cmd;
@@ -84,7 +88,7 @@ namespace Dnevnik_2._0
             }
             conn.Close();
         }
-        public void login_adim(string u,string p)
+        public void login_adim(string u, string p)
         {
             if (u == "admin" && p == "admin")
             {
@@ -97,11 +101,11 @@ namespace Dnevnik_2._0
         private void button3_Click(object sender, EventArgs e)
         {
             //proverava se koj buttons se klikne
-            if (k==1)
+            if (k == 1)
             {
-                login_nastavnika(textBox1.Text,textBox2.Text);
+                login_nastavnika(textBox1.Text, textBox2.Text);
             }
-            else if(k==2)
+            else if (k == 2)
             {
                 login_ucenika(textBox1.Text, textBox2.Text);
             }
@@ -117,7 +121,7 @@ namespace Dnevnik_2._0
             button2.Show();
             button4.Hide();
             button5.Show();
-            this.Size = new Size(280, 100);
+            this.Size = new Size(panel1.Width, panel1.Height);
             Putanje();
             groupBox1.Visible = false;
             textBox1.Text = "";
@@ -154,7 +158,7 @@ namespace Dnevnik_2._0
             //                                                "password varchar(20) not null);",
             //                                              conn);
 
-                
+
             //    cmd.ExecuteNonQuery();
             //    conn.Close();
             //    conn2.Open();
@@ -195,12 +199,30 @@ namespace Dnevnik_2._0
             Log_in_scr();
         }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+                textBox2.PasswordChar = '\0';
+            else
+                textBox2.PasswordChar = '*';
+        }
+
         public void Log_in_scr()
         {
             //Login screen
             button4.Show();
             groupBox1.Visible = true;
-            this.Size = new Size(300,300);
+            this.Size = new Size(panel1.Width, 300);
             button1.Visible = false;
             button2.Visible = false;
             button5.Hide();

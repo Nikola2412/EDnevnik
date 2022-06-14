@@ -8,16 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using System.Diagnostics;
+using System.IO;
 
 namespace Dnevnik_2._0
 {
     public partial class Form2 : Form
     {
-        public SQLiteConnection conn,conn2;
+        public SQLiteConnection conn, conn2;
         public Form2()
         {
             InitializeComponent();
         }
+        Random r = new Random();
         public int id_nastavnika;
         public int id_predmeta;
         public string username;
@@ -39,21 +42,42 @@ namespace Dnevnik_2._0
         {
             this.Size = new Size(1280, 720);
         }
-
+        //int broj_slika;
+        //string slike = "./pozadine/";
         private void Form2_Load(object sender, EventArgs e)
         {
             f1 = (Form1)Application.OpenForms[0];
+
 
             conn = f1.conn2;
             conn2 = f1.conn3;
 
             label1.Text = username;
 
+            //if(!Directory.Exists(slike))
+            //    Directory.CreateDirectory(slike);
+
+            //broj_slika = Directory.GetFiles(slike).Length;
+            //// MessageBox.Show(broj_slika.ToString());
+            //if (broj_slika == 0)
+            //{
+            //    ProcessStartInfo p = new ProcessStartInfo(@".\Generisanje_Slika_csharp.exe");
+            //    Process.Start(p);
+            //    System.Threading.Thread.Sleep(3000);
+            //}
+
             velicina_forme();
 
             Kalkulacije_broja_ucenika();
 
             sakupi_odeljenja();
+            pozicija_dugmadi();
+            
+        }
+        public void pozicija_dugmadi()
+        {
+            button6.Location = new Point(this.Width - 2*button6.Width,button6.Location.Y);
+            button7.Location = new Point((int)(button6.Location.X - 1.5 * button7.Width), button6.Location.Y);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -64,7 +88,7 @@ namespace Dnevnik_2._0
             foreach (var item in l)
             {
                 if (item.Text == od_raz)
-                    forma3(int.Parse(item.Name),od_raz);
+                    forma3(int.Parse(item.Name), od_raz);
             }
         }
 
@@ -80,13 +104,13 @@ namespace Dnevnik_2._0
             {
                 this.Controls.Add(label);
             }
-            
+
         }
         public void kordinate()
         {
             dx();
 
-            y = border;
+            y = border + panel1.Height;
         }
         public void Kalkulacije_broja_ucenika()
         {
@@ -97,14 +121,13 @@ namespace Dnevnik_2._0
             nw = Math.Floor(d);
             if (nw < 1)
                 nw = 1;
-            
 
         }
 
         private void Form2_Resize(object sender, EventArgs e)
         {
             Kalkulacije_broja_ucenika();
-
+            pozicija_dugmadi();
             ponovna_raspodela_lab();
             ponovna_raspodela_pic();
         }
@@ -146,7 +169,7 @@ namespace Dnevnik_2._0
         //setting u buducnosti
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"{x}-{nw}-{this.Size}");
+            MessageBox.Show($"U izradi je");
         }
 
         private void Form2_FormClosed(object sender, FormClosedEventArgs e)
@@ -163,6 +186,7 @@ namespace Dnevnik_2._0
                     forma3(id, item.Text);
             }
         }
+
         public void sakupi_odeljenja()
         {
             conn.Open();
@@ -177,7 +201,7 @@ namespace Dnevnik_2._0
             sqlite_cmd.CommandText = $"SELECT * FROM Odeljenje_nastavnik join Odeljenje using (id_odeljenja) where Id_nastavnika = {id_nastavnika} order by razred,naziv";
 
             sqlite_datareader = sqlite_cmd.ExecuteReader();
-
+            int n = 1;
             while (sqlite_datareader.Read())
             {
                 int index = sqlite_datareader.GetInt16(0);
@@ -188,7 +212,7 @@ namespace Dnevnik_2._0
                 sqlite_cmd2.CommandText = $"SELECT * FROM Odeljenje Where Id_odeljenja = {index}";
                 sqlite_datareader2 = sqlite_cmd2.ExecuteReader();
 
-                int n = 1;
+
 
                 while (sqlite_datareader2.Read())
                 {
@@ -198,17 +222,19 @@ namespace Dnevnik_2._0
                     o.Add(new Odeljenja(id));
 
                     comboBox1.Items.Add(raz_ime(raz, ime));
-                    Raspodela(id, raz_ime(raz,ime));
+                    Raspodela(id, raz_ime(raz, ime));
 
                     x += a + rw;
-                    n++;
+
 
                     //kad ce da prelomi u novi red
+
                     if (n % nw == 0)
                     {
                         y += b + rh;
                         dx();
                     }
+                    n++;
                 }
                 conn2.Close();
             }
@@ -217,18 +243,136 @@ namespace Dnevnik_2._0
             Postavi();
 
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panel1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Maximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
+                //velicina_forme();
+            }
+
+        }
+        bool dragging = false;
+        Point dragCursorPoint;
+        Point dragFormPoint;
+
+        public void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            dragging = true;
+            dragCursorPoint = Cursor.Position;
+            dragFormPoint = this.Location;
+        }
+
+        public void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (dragging)
+            {
+                Point dif = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
+                this.Location = Point.Add(dragFormPoint, new Size(dif));
+            }
+        }
+
+        public void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            dragging = false;
+        }
+        bool drag2 = false;
+        Point t;
+        private void Form2_MouseDown(object sender, MouseEventArgs e)
+        {
+            t = e.Location;
+            if (t.X >= this.Width - 5 || t.X <= 5 || t.Y <= 5 || t.Y >= this.Height - 5)
+            {
+                drag2 = true;
+            }
+        }
+
+        private void Form2_MouseUp(object sender, MouseEventArgs e)
+        {
+            Cursor = Cursors.Default;
+            drag2 = false;
+        }
+
+        private void Form2_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.X >= this.Width - 5 || e.X <= 5 ||  e.Y >= this.Height - 5)
+            {
+                Cursor = Cursors.VSplit;
+            }
+            else
+                Cursor = Cursors.Default;
+            if (!drag2) return;
+
+            this.Size = new Size(this.Width + (e.X - t.X), this.Height + (e.Y - t.Y));
+            t = e.Location;
+
+        }
+
         public void dx()
         {
             x = Math.Max(comboBox1.Width + comboBox1.Location.X, label1.Width + label1.Location.X) + 20;
         }
-        public void Raspodela(int id,string odeljenje)
+        public Bitmap CreateBitmapImage(string sImageText)
+        {
+            Bitmap objBmpImage = new Bitmap(1000, 5000);
+
+            int intWidth = 0;
+            int intHeight = 0;
+
+            // Create the Font object for the image text drawing.
+            System.Drawing.Font objFont = new System.Drawing.Font("Arial", 64, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+
+            // Create a graphics object to measure the text's width and height.
+            Graphics objGraphics = Graphics.FromImage(objBmpImage);
+
+            // This is where the bitmap size is determined.
+            intWidth += (int)objGraphics.MeasureString(sImageText, objFont).Width;
+            intHeight += (int)objGraphics.MeasureString(sImageText, objFont).Height;
+
+            // Create the bmpImage again with the correct size for the text and font.
+            objBmpImage = new Bitmap(objBmpImage, new Size(intWidth, intHeight));
+
+
+            // Add the colors to the new bitmap.
+            objGraphics = Graphics.FromImage(objBmpImage);
+
+            // Set Background color
+
+            objGraphics.Clear(System.Drawing.Color.White);
+            objGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+
+
+            objGraphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias; //  <-- This is the correct value to use. ClearTypeGridFit is better yet!
+            objGraphics.DrawString(sImageText, objFont, new SolidBrush(System.Drawing.Color.Black), 0, 0, StringFormat.GenericDefault);
+
+            objGraphics.Flush();
+
+            return (objBmpImage);
+        }
+        public void Raspodela(int id, string odeljenje)
         {
             //dadavanje pictueboxa i labla
             p.Add(new PictureBox {
                 Name = id.ToString(),
                 Size = new Size(a, b),
                 Location = new Point(x, y),
-                Image = new Bitmap(Image.FromFile("nesto.jpg"), new Size(a, b)),
+                Image = new Bitmap(CreateBitmapImage(odeljenje), new Size(a, b)),
                 BorderStyle = BorderStyle.Fixed3D
             });
             l.Add(new Label {
@@ -240,7 +384,7 @@ namespace Dnevnik_2._0
             });
 
         }
-        public void forma3(int id,string ime)
+        public void forma3(int id, string ime)
         {
             f3 = new Form3();
             //MessageBox.Show(o[0].id_odeljenja.ToString());
@@ -258,10 +402,9 @@ namespace Dnevnik_2._0
                 }
                 n++;
             }
-            
-;       }
-        
-        public string raz_ime(int a,int b)
+        }
+
+        public string raz_ime(int a, int b)
         {
             return $"{a}-{b}";
         }
