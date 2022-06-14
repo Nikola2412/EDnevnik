@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Data.SQLite;
-using System.Diagnostics;
-using System.IO;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Dnevnik_2._0
 {
@@ -72,11 +65,11 @@ namespace Dnevnik_2._0
 
             sakupi_odeljenja();
             pozicija_dugmadi();
-            
+
         }
         public void pozicija_dugmadi()
         {
-            button6.Location = new Point(this.Width - 2*button6.Width,button6.Location.Y);
+            button6.Location = new Point(this.Width - 2 * button6.Width, button6.Location.Y);
             button7.Location = new Point((int)(button6.Location.X - 1.5 * button7.Width), button6.Location.Y);
         }
 
@@ -293,10 +286,12 @@ namespace Dnevnik_2._0
         }
         bool drag2 = false;
         Point t;
+        bool naMestuV = false;
+        bool naMestuH = false;
         private void Form2_MouseDown(object sender, MouseEventArgs e)
         {
             t = e.Location;
-            if (t.X >= this.Width - 5 || t.X <= 5 || t.Y <= 5 || t.Y >= this.Height - 5)
+            if (naMestuH || naMestuV)
             {
                 drag2 = true;
             }
@@ -310,15 +305,26 @@ namespace Dnevnik_2._0
 
         private void Form2_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.X >= this.Width - 5 || e.X <= 5 ||  e.Y >= this.Height - 5)
+            if (e.X >= this.Width - 5 || e.X <= 5)
             {
                 Cursor = Cursors.VSplit;
+                naMestuH = true;
+                naMestuV = false;
+            }
+            else if (e.Y >= this.Height - 5)
+            {
+                Cursor = Cursors.HSplit;
+                naMestuV = true;
+                naMestuH = false;
             }
             else
                 Cursor = Cursors.Default;
             if (!drag2) return;
 
-            this.Size = new Size(this.Width + (e.X - t.X), this.Height + (e.Y - t.Y));
+            if (naMestuH)
+                this.Width += e.X - t.X;
+            if (naMestuV)
+                this.Height += e.Y - t.Y;
             t = e.Location;
 
         }
