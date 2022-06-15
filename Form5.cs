@@ -52,7 +52,7 @@ namespace Dnevnik_2._0
         {
             textBox1.Text = opis;
             //MessageBox.Show(ocena.ToString());
-            b[ocena-1].BackColor = Color.Aqua;
+            b[ocena-1].BackColor = Color.Gray;
             b[ocena-1].ForeColor = Color.Black;
         }
         private void button6_Click(object sender, EventArgs e)
