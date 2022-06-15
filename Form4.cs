@@ -117,16 +117,16 @@ namespace Dnevnik_2._0
                 f2.o[ind].u[index].id_Ocena_opis.Add(Tuple.Create(id_poslednje_ocene,ocena, opis));
                 //ponovo ucitava
                 CITAJ();
-                if (ocena == 5)
-                    f3.petice++;
-                else if (ocena == 4)
-                    f3.cetvorke++;
-                else if (ocena == 3)
-                    f3.trojke++;
-                else if (ocena == 2)
-                    f3.dvojke++;
-                else
-                    f3.jedinice++;
+                //if (ocena == 5)
+                //    f3.petice++;
+                //else if (ocena == 4)
+                //    f3.cetvorke++;
+                //else if (ocena == 3)
+                //    f3.trojke++;
+                //else if (ocena == 2)
+                //    f3.dvojke++;
+                //else
+                //    f3.jedinice++;
                 update();
             }
 

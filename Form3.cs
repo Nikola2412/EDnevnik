@@ -33,7 +33,7 @@ namespace Dnevnik_2._0
 
         public List<PictureBox> p = new List<PictureBox>();
         public List<Label> l = new List<Label>();
-        public int jedinice, dvojke, trojke, cetvorke, petice = 0;
+        //public int jedinice, dvojke, trojke, cetvorke, petice = 0;
 
         bool dragging = false;
         Point dragCursorPoint;
@@ -356,16 +356,16 @@ namespace Dnevnik_2._0
                     string opis = sqlite_datareader2.GetString(5);
                     o.Add(Tuple.Create(id,ocena, opis));
                     srednja += ocena;
-                    if (ocena == 5)
-                        petice++;
-                    else if (ocena == 4)
-                        cetvorke++;
-                    else if (ocena == 3)
-                        trojke++;
-                    else if (ocena == 2)
-                        dvojke++;
-                    else
-                        jedinice++;
+                    //if (ocena == 5)
+                    //    petice++;
+                    //else if (ocena == 4)
+                    //    cetvorke++;
+                    //else if (ocena == 3)
+                    //    trojke++;
+                    //else if (ocena == 2)
+                    //    dvojke++;
+                    //else
+                    //    jedinice++;
                     //izdvaja mesec iz datuma
                     int dt = int.Parse(sqlite_datareader2.GetString(4).Split('-')[1]);
                     dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString() + " ";
