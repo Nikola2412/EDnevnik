@@ -51,7 +51,10 @@ namespace Dnevnik_2._0
                         this.Hide();
                     }
                     else
+                    {
                         MessageBox.Show("Pogresna lozinka");
+                        k = true;
+                    }
                 }
             }
             conn.Close();
@@ -65,7 +68,7 @@ namespace Dnevnik_2._0
             conn.Open();
             sqlite_cmd = conn.CreateCommand();
             sqlite_cmd.CommandText = "SELECT * FROM Ucenik";
-
+            bool k = false;
             sqlite_datareader = sqlite_cmd.ExecuteReader();
             //login ucenika, proverava se tabela "Ucenika"
             while (sqlite_datareader.Read())
@@ -76,6 +79,7 @@ namespace Dnevnik_2._0
                     {
                         //ako se podaci poklapaju druga forma se ucitava
                         Form6 f6 = new Form6();
+                        k = true;
                         f6.index = sqlite_datareader.GetInt32(0);
                         f6.ime = sqlite_datareader.GetString(1);
                         f6.pol = sqlite_datareader.GetBoolean(5);
@@ -83,10 +87,15 @@ namespace Dnevnik_2._0
                         this.Hide();
                     }
                     else
+                    {
                         MessageBox.Show("Pogresna lozinka");
+                        k = true;
+                    }
                 }
             }
             conn.Close();
+            if (!k)
+                MessageBox.Show("Pogresan useraname");
         }
         public void login_adim(string u, string p)
         {

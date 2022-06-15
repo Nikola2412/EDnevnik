@@ -39,9 +39,41 @@ namespace Dnevnik_2._0
         //List<string> predmeti = new List<string>();
         List<Tuple<int, string>> oo = new List<Tuple<int, string>>();
 
+        string seriija = "Ocene";
+
+        bool dragging = false;
+        Point dragCursorPoint;
+        Point dragFormPoint;
+
         private void Form5_FormClosing(object sender, FormClosingEventArgs e)
         {
             f1.Show();
+        }
+
+        public void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            dragging = true;
+            dragCursorPoint = Cursor.Position;
+
+            dragFormPoint = this.Location;
+        }
+        public void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (dragging)
+            {
+                Point dif = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
+                this.Location = Point.Add(dragFormPoint, new Size(dif));
+            }
+        }
+
+        public void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            dragging = false;
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         int a = 100, b = 120;
@@ -54,18 +86,21 @@ namespace Dnevnik_2._0
             //default podesavanja
             postavke();
             f1 = (Form1)Application.OpenForms[0];
-            label1.Text = ime;
+            label2.Text += " "+ ime;
             conn = f1.conn2;
             conn2 = f1.conn3;
 
+            chart1.Series.Add(seriija);
             //koliko ocena u jednom redu
             kalkulacija();
             //ucitavanje iz baze
             Ispis();
             //grafs ide ispos ispisa da se sve ocene prov prebroje
-            chart();
+            
             //Prosek ucenika
             Prosek();
+
+            chart();
 
             //odredjivanje pola za sliku
             if (pol)
@@ -135,7 +170,18 @@ namespace Dnevnik_2._0
                 //MessageBox.Show(id_predmeta.ToString());
                 oo.Add(Tuple.Create(ocena, opis));
 
-                
+                if (ocena == 5)
+                    petice++;
+                else if (ocena == 4)
+                    cetvorke++;
+                else if (ocena == 3)
+                    trojke++;
+                else if (ocena == 2)
+                    dvojke++;
+                else
+                    jedinice++;
+
+
                 if (id!=id_predmeta)
                 {
                     
@@ -188,6 +234,16 @@ namespace Dnevnik_2._0
         }
         public void chart()
         {
+            if (petice != 0)
+                chart1.Series[seriija].Points.AddXY("5", petice);
+            if (cetvorke != 0)
+                chart1.Series[seriija].Points.AddXY("4", cetvorke);
+            if (trojke != 0)
+                chart1.Series[seriija].Points.AddXY("3", trojke);
+            if (dvojke != 0)
+                chart1.Series[seriija].Points.AddXY("2", dvojke);
+            if (jedinice != 0)
+                chart1.Series[seriija].Points.AddXY("1", jedinice);
         }
         public void Prosek()
         {

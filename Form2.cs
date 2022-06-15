@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Dnevnik_2._0
 {
@@ -30,17 +31,17 @@ namespace Dnevnik_2._0
         public int a, b;
 
         double nw;
-
+        Size s;
         public void velicina_forme()
         {
-            this.Size = new Size(1280, 720);
+            this.Size = s;
         }
         //int broj_slika;
         //string slike = "./pozadine/";
         private void Form2_Load(object sender, EventArgs e)
         {
             f1 = (Form1)Application.OpenForms[0];
-
+            s = new Size(1280, 720);
 
             conn = f1.conn2;
             conn2 = f1.conn3;
@@ -60,13 +61,19 @@ namespace Dnevnik_2._0
             //}
 
             velicina_forme();
+            //MessageBox.Show(this.Size.ToString());
 
             Kalkulacije_broja_ucenika();
 
             sakupi_odeljenja();
             pozicija_dugmadi();
-
+            if (l[l.Count - 1].Location.Y + l[l.Count - 1].Height > s.Height)
+            {
+                this.AutoScroll = true;
+            }
+            moze = true;
         }
+        bool moze = false;
         public void pozicija_dugmadi()
         {
             button6.Location = new Point(this.Width - 2 * button6.Width, button6.Location.Y);
@@ -119,10 +126,22 @@ namespace Dnevnik_2._0
 
         private void Form2_Resize(object sender, EventArgs e)
         {
+            if (!moze)
+                return;
+
             Kalkulacije_broja_ucenika();
             pozicija_dugmadi();
             ponovna_raspodela_lab();
             ponovna_raspodela_pic();
+            s = this.Size;
+            if (l[l.Count - 1].Location.Y + l[l.Count - 1].Height > s.Height)
+            {
+                this.AutoScroll = true;
+            }
+            else
+            {
+                this.AutoScroll = false;
+            }
         }
         public void ponovna_raspodela_pic()
         {
@@ -256,7 +275,6 @@ namespace Dnevnik_2._0
             else
             {
                 this.WindowState = FormWindowState.Normal;
-                //velicina_forme();
             }
 
         }
@@ -268,6 +286,7 @@ namespace Dnevnik_2._0
         {
             dragging = true;
             dragCursorPoint = Cursor.Position;
+            
             dragFormPoint = this.Location;
         }
 
@@ -275,6 +294,12 @@ namespace Dnevnik_2._0
         {
             if (dragging)
             {
+                if (this.WindowState == FormWindowState.Maximized)
+                {
+
+                    if (dragCursorPoint.Y < e.Y + 10)
+                        this.WindowState = FormWindowState.Normal;
+                }
                 Point dif = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
                 this.Location = Point.Add(dragFormPoint, new Size(dif));
             }
@@ -305,7 +330,9 @@ namespace Dnevnik_2._0
 
         private void Form2_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.X >= this.Width - 5 || e.X <= 5)
+            if (this.WindowState == FormWindowState.Maximized)
+                return;
+            if ((e.X >= this.Width - 5 - SystemInformation.VerticalScrollBarWidth || e.X <= 5) && e.Y>panel1.Height)
             {
                 Cursor = Cursors.VSplit;
                 naMestuH = true;
@@ -326,6 +353,17 @@ namespace Dnevnik_2._0
             if (naMestuV)
                 this.Height += e.Y - t.Y;
             t = e.Location;
+
+        }
+
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
 
         }
 

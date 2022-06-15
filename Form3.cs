@@ -35,6 +35,77 @@ namespace Dnevnik_2._0
         public List<Label> l = new List<Label>();
         public int jedinice, dvojke, trojke, cetvorke, petice = 0;
 
+        bool dragging = false;
+        Point dragCursorPoint;
+        Point dragFormPoint;
+
+        public void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            dragging = true;
+            dragCursorPoint = Cursor.Position;
+
+            dragFormPoint = this.Location;
+        }
+        public void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (dragging)
+            {
+                Point dif = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
+                this.Location = Point.Add(dragFormPoint, new Size(dif));
+            }
+        }
+
+        public void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            dragging = false;
+        }
+        bool drag2 = false;
+        Point t;
+        bool naMestuV = false;
+        bool naMestuH = false;
+        private void Form3_MouseDown(object sender, MouseEventArgs e)
+        {
+            t = e.Location;
+            if (naMestuH || naMestuV)
+            {
+                drag2 = true;
+            }
+        }
+
+        private void Form3_MouseUp(object sender, MouseEventArgs e)
+        {
+            Cursor = Cursors.Default;
+            drag2 = false;
+        }
+
+        private void Form3_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Maximized)
+                return;
+            if ((e.X >= this.Width - 5 - SystemInformation.VerticalScrollBarWidth || e.X <= 5) && e.Y > panel1.Height)
+            {
+                Cursor = Cursors.VSplit;
+                naMestuH = true;
+                naMestuV = false;
+            }
+            else if (e.Y >= this.Height - 5)
+            {
+                Cursor = Cursors.HSplit;
+                naMestuV = true;
+                naMestuH = false;
+            }
+            else
+                Cursor = Cursors.Default;
+            if (!drag2) return;
+
+            if (naMestuH)
+                this.Width += e.X - t.X;
+            if (naMestuV)
+                this.Height += e.Y - t.Y;
+            t = e.Location;
+
+        }
+
         private void button3_Click(object sender, EventArgs e)
         {
             Microsoft.Office.Interop.Excel._Application app = new Microsoft.Office.Interop.Excel.Application();
@@ -113,15 +184,66 @@ namespace Dnevnik_2._0
             }
         }
         Size s;
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        public void pozicija_dugmadi()
+        {
+            button6.Location = new Point(this.Width - 2 * button6.Width, button6.Location.Y);
+        }
+
+        private void Form3_Resize(object sender, EventArgs e)
+        {
+            Kalkulacije_broja_ucenika();
+            pozicija_dugmadi();
+            ponovna_raspodela_lab();
+            ponovna_raspodela_pic();
+        }
+        public void Povecaj_x_y(int i)
+        {
+            x += a + rw;
+            if (i % nw == 0)
+            {
+                y += b + rh;
+                x = Math.Max(button1.Width + button1.Location.X, label1.Width + label1.Location.X) + 20;
+            }
+        }
+        public void ponovna_raspodela_pic()
+        {
+            kordinate();
+            int i = 0;
+            foreach (var pic in p)
+            {
+                i++;
+                pic.Location = new Point(x, y);
+
+                Povecaj_x_y(i);
+
+            }
+        }
+        public void ponovna_raspodela_lab()
+        {
+            kordinate();
+            int i = 0;
+            foreach (var lab in l)
+            {
+                i++;
+                lab.Location = new Point(x, y + b);
+                Povecaj_x_y(i);
+
+            }
+        }
         int h;
         private void Form3_Load(object sender, EventArgs e)
         {
             s = this.Size;
             f2 = (Form2)Application.OpenForms[1];
-            this.label1.Text = f2.label1.Text;
+            this.label1.Text += f2.label1.Text;
             conn = f2.conn;
             conn2 = f2.conn2;
-
+            pozicija_dugmadi();
             //MessageBox.Show(id_predmeta.ToString());
             Kalkulacije_broja_ucenika();
 
@@ -153,7 +275,7 @@ namespace Dnevnik_2._0
         {
             x = Math.Max(button1.Width + button1.Location.X, label1.Width + label1.Location.X) + 20;
 
-            y = border;
+            y = border + panel1.Height;
         }
         public void Kalkulacije_broja_ucenika()
         {

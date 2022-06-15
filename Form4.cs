@@ -50,6 +50,32 @@ namespace Dnevnik_2._0
             pictureBox1.Size = new Size(a, b);
             CITAJ();
         }
+
+        bool dragging = false;
+        Point dragCursorPoint;
+        Point dragFormPoint;
+
+        public void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            dragging = true;
+            dragCursorPoint = Cursor.Position;
+
+            dragFormPoint = this.Location;
+        }
+        public void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (dragging)
+            {
+                Point dif = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
+                this.Location = Point.Add(dragFormPoint, new Size(dif));
+            }
+        }
+
+        public void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            dragging = false;
+        }
+
         public void najveci_id_ocene()
         {
             SQLiteCommand cmd=new SQLiteCommand(String.Format("Select max(id_ocene) from Ocena"),conn);
@@ -144,7 +170,7 @@ namespace Dnevnik_2._0
                 o.Add(Tuple.Create(ocena.Item1,ocena.Item2));
             }
             ime = f2.o[ind].u[index].UCENIK;
-            label1.Text = ime;
+            label1.Text = $"Ucenik: {ime}";
 
 
             kalkulacija();
@@ -189,7 +215,7 @@ namespace Dnevnik_2._0
         public void x_y()
         {
             x = ClientRectangle.Width / 3;
-            y = border + strana / 2;
+            y = border + strana / 2 + panel1.Height;
         }
         //Restart koda
         public void brisi()
@@ -225,6 +251,12 @@ namespace Dnevnik_2._0
             CITAJ();
             //f2.o[ind].u[index].id_Ocena_opis[i].Item3 = s;
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         int i;
         private void klik(object sender, EventArgs e)
         {

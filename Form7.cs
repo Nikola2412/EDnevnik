@@ -76,5 +76,10 @@ namespace Dnevnik_2._0
             f5.button6.Text = "Potvrdi izmenu";
             f5.ShowDialog();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
