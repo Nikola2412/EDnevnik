@@ -81,5 +81,29 @@ namespace Dnevnik_2._0
         {
             this.Close();
         }
+        bool dragging = false;
+        Point dragCursorPoint;
+        Point dragFormPoint;
+
+        public void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            dragging = true;
+            dragCursorPoint = Cursor.Position;
+
+            dragFormPoint = this.Location;
+        }
+        public void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (dragging)
+            {
+                Point dif = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
+                this.Location = Point.Add(dragFormPoint, new Size(dif));
+            }
+        }
+
+        public void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            dragging = false;
+        }
     }
 }
