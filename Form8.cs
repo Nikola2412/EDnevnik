@@ -22,7 +22,7 @@ namespace Dnevnik_2._0
         public string[] pol = {"zenski","muski"};
         public string[] imena = {"Marko", "Milos", "Matija", "Stefan","Vlada" };
         public string[] prezimena = { "Markovic", "Rukavina", "Zdravkovic", "Lazic", "Bogdanov" };
-        public string[] predmeti = {"Informatika","Biologija", "Likovno","Muzicko"};
+        //public string[] predmeti = {"Informatika","Biologija", "Likovno","Muzicko"};
         //List<Tuple<int, string>> id_odeljenje = new List<Tuple<int, string>>();
         List<int> id_o = new List<int>();
         Form1 f1;
@@ -84,22 +84,32 @@ namespace Dnevnik_2._0
             //conn = f1.conn2;
             //SQLiteCommand sqlite_cmd;
             //conn.Open();
-
-            //    for (int i = 0; i < 2; i++)
+            //List<string>postoji = new List<string>();
+            //for (int i = 0; i < imena.Length; i++)
+            //{
+            //    for (int j = 0; j < prezimena.Length; j++)
             //    {
-            //        string ucenik, username, password;
+            //        string ucenik, username="", password="";
             //        int index = r.Next(1, 3);
-            //        int pol = r.Next(1, 3);
+            //        int pol = r.Next(0, 2);
             //        string ime = imena[r.Next(imena.Length)];
             //        string prezime = prezimena[r.Next(prezimena.Length)];
             //        ucenik = ime + " " + prezime;
-            //        username = ime[r.Next(ime.Length)] +""+ prezime[r.Next(prezime.Length)];
-            //        password = "123";
 
+            //        if (postoji != null && !postoji.Contains(ime + " " + prezime))
+            //            username = ime + " " + prezime;
+            //        else if (!postoji.Contains(prezime + " " + ime))
+            //            username = prezime + " " + ime;
+            //        else
+            //            continue;
+            //        password = "123";
+            //        postoji.Add(username);
             //        sqlite_cmd = new SQLiteCommand(String.Format("insert into Ucenik(Ucenik,ID_odeljenja,username,password,pol) values('{0}',{1},'{2}','{3}','{4}');",
             //            ucenik, index, username, password, pol), conn);
             //        sqlite_cmd.ExecuteNonQuery();
             //    }
+
+            //}
 
             //for (int j = 1; j < 11; j++)
             //{
@@ -119,6 +129,10 @@ namespace Dnevnik_2._0
             //        sqlite_cmd.ExecuteNonQuery();
             //    }
             //}
+            //sqlite_cmd = new SQLiteCommand(String.Format($"Delete from ocena where id_ucenika>6"), conn);
+            //       sqlite_cmd.ExecuteNonQuery();
+
+
             //conn.Close();
         }
         public void add_ucenik()

@@ -167,7 +167,7 @@ namespace Dnevnik_2._0
             {
                 button3.Show();
 
-                this.Width = dataGridView1.Width + button1.Location.X * 2;
+                this.Width = dataGridView1.Width + button1.Location.X * 2+20;
                 dataGridView1.Show();
                 foreach (var item in p)
                 {

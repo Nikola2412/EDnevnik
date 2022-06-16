@@ -135,6 +135,8 @@ namespace Dnevnik_2._0
         }
         public void prosek(int n,int k)
         {
+            if (n == 0)
+                return;
             pred[n - 1].racunaj();
             //MessageBox.Show(pred[n - 1].prosek.ToString("0.00"));
             Label label = new Label() {

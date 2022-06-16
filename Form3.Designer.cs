@@ -88,6 +88,7 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.c1,
@@ -106,7 +107,7 @@
             this.prosek});
             this.dataGridView1.Location = new System.Drawing.Point(12, 217);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1444, 45);
+            this.dataGridView1.Size = new System.Drawing.Size(1443, 45);
             this.dataGridView1.TabIndex = 4;
             this.dataGridView1.Visible = false;
             // 
@@ -212,7 +213,7 @@
             this.panel1.Font = new System.Drawing.Font("Cambria", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1456, 41);
+            this.panel1.Size = new System.Drawing.Size(1455, 41);
             this.panel1.TabIndex = 12;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
