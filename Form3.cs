@@ -304,7 +304,82 @@ namespace Dnevnik_2._0
                 this.Controls.Remove(item);
             }
         }
+        public void update_ocena()
+        {
+            conn.Open();
 
+            dataGridView1.Rows.Clear();
+            dataGridView1.Hide();
+
+            SQLiteDataReader sqlite_datareader;
+            SQLiteCommand sqlite_cmd;
+            SQLiteDataReader sqlite_datareader2;
+            SQLiteCommand sqlite_cmd2;
+
+            sqlite_cmd = conn.CreateCommand();
+            sqlite_cmd.CommandText = $"SELECT * FROM Ucenik where ID_odeljenja = {id_odeljenja}";
+
+            int n = 0;
+
+            sqlite_datareader = sqlite_cmd.ExecuteReader();
+            while (sqlite_datareader.Read())
+            {
+                //tuple ocena,opis ocene
+                List<Tuple<int, int, string>> o = new List<Tuple<int, int, string>>();
+
+
+
+                int index = sqlite_datareader.GetInt16(0);
+                string uc = sqlite_datareader.GetString(1);
+                conn2.Open();
+                //konekcija za tabelu ocene
+
+                //komanda za citanje
+                sqlite_cmd2 = conn2.CreateCommand();
+                sqlite_cmd2.CommandText = $"SELECT * FROM Ocena WHERE ID_ucenika = {index} and id_predmeta = {id_predmeta}";
+
+                sqlite_datareader2 = sqlite_cmd2.ExecuteReader();
+                int srednja = 0;
+
+                dataGridView1.Rows.Add(uc);
+                dataGridView1.Height += h;
+
+                //cita ocene i broj da li su 5, 4, 3, 2 ili 1 da bi se uradila pita 
+                while (sqlite_datareader2.Read())
+                {
+                    int ocena = sqlite_datareader2.GetInt16(3);
+                    int id = sqlite_datareader2.GetInt16(0);
+                    string opis = sqlite_datareader2.GetString(5);
+                    o.Add(Tuple.Create(id, ocena, opis));
+                    srednja += ocena;
+                    //if (ocena == 5)
+                    //    petice++;
+                    //else if (ocena == 4)
+                    //    cetvorke++;
+                    //else if (ocena == 3)
+                    //    trojke++;
+                    //else if (ocena == 2)
+                    //    dvojke++;
+                    //else
+                    //    jedinice++;
+                    //izdvaja mesec iz datuma
+                    int dt = int.Parse(sqlite_datareader2.GetString(4).Split('-')[1]);
+                    dataGridView1.Rows[n].Cells[dt].Value += ocena.ToString() + " ";
+                }
+                //raspodela ucenika po ekranu
+                conn2.Close();
+
+                //dodaje ucenika u klasu
+
+                f2.o[ind].u.Add(new ucenik(uc, o, srednja, sqlite_datareader.GetInt16(0), sqlite_datareader.GetBoolean(5)));
+
+                dataGridView1.Rows[n].Cells["prosek"].Value = f2.o[ind].u[n].srednja.ToString("0.00");
+                //pomera u desno
+                x += a + rw;
+                n++;
+            }
+            conn.Close();
+        }
         public void ucitaj()
         {
             ukoloni();

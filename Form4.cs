@@ -247,7 +247,7 @@ namespace Dnevnik_2._0
         public void update()
         {
             f2.o[ind].u.Clear();
-            f3.ucitaj();
+            f3.update_ocena();
             CITAJ();
             //f2.o[ind].u[index].id_Ocena_opis[i].Item3 = s;
         }
