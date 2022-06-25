@@ -130,6 +130,7 @@ namespace Dnevnik_2._0
             button2.Show();
             button4.Hide();
             button5.Show();
+            checkBox1.Checked = false;
             this.Size = new Size(panel1.Width, panel1.Height);
             Putanje();
             groupBox1.Visible = false;

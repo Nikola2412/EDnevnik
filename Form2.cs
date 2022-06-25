@@ -186,7 +186,9 @@ namespace Dnevnik_2._0
 
         private void Form2_FormClosed(object sender, FormClosedEventArgs e)
         {
+            f1.textBox2.Clear();
             f1.Show();
+            
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
